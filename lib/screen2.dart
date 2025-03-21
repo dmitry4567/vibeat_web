@@ -244,145 +244,9 @@ class _Screenn2PageState extends State<Screenn2Page> {
 }
 
 class DynamicHeightContainer extends StatelessWidget {
-  OverlayEntry? _overlayEntry;
-  final GlobalKey _buttonKey = GlobalKey(); // Добавляем GlobalKey для кнопки
+  final GlobalKey _buttonKey = GlobalKey();
 
   DynamicHeightContainer({super.key});
-
-  void _showOverlay(BuildContext context) {
-    final RenderBox renderBox =
-        _buttonKey.currentContext?.findRenderObject() as RenderBox;
-    final offset = renderBox.localToGlobal(Offset.zero);
-    final buttonHeight = renderBox.size.height;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: offset.dy - buttonHeight * 4 - 8, // Смещаем Overlay выше кнопки
-        left: offset.dx - 390,
-        child: Material(
-          borderRadius: BorderRadius.circular(6),
-          color: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.white.withOpacity(0.05),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
-                  blurRadius: 25.0,
-                  spreadRadius: 25.0,
-                ),
-              ],
-              borderRadius: BorderRadius.circular(6),
-            ),
-            width: 180,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (_overlayEntry != null) _overlayEntry!.remove();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      const Color(0xff151515),
-                    ),
-                    overlayColor: WidgetStateProperty.all(
-                      Colors.white10,
-                    ),
-                    shape: const WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                        ),
-                      ),
-                    ),
-                    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 18,
-                    )),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      Icon(
-                        Icons.settings_outlined,
-                        size: 22,
-                        weight: 22,
-                        color: Colors.white.withOpacity(0.5),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Редактировать",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.5),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Helvetica",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_overlayEntry != null) _overlayEntry?.remove();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      const Color(0xff151515),
-                    ),
-                    overlayColor: WidgetStateProperty.all(
-                      Colors.white10,
-                    ),
-                    shape: const WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                      ),
-                    ),
-                    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 16,
-                    )),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      Icon(
-                        Icons.delete_outline,
-                        size: 22,
-                        weight: 22,
-                        color: Colors.white.withOpacity(0.5),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Удалить",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.5),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Helvetica",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    // Вставляем Overlay
-    Overlay.of(context).insert(_overlayEntry!);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -488,17 +352,18 @@ class DynamicHeightContainer extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(const Color(0xff1e1e1e)),
-                          overlayColor: WidgetStateProperty.all(Colors.white10),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff1e1e1e)),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.white10),
                           minimumSize:
-                              WidgetStateProperty.all(const Size(34, 34)),
+                              MaterialStateProperty.all(const Size(34, 34)),
                           fixedSize:
-                              WidgetStateProperty.all(const Size(34, 34)),
-                          padding: WidgetStateProperty.all(
+                              MaterialStateProperty.all(const Size(34, 34)),
+                          padding: MaterialStateProperty.all(
                             EdgeInsets.zero,
                           ),
-                          shape: WidgetStatePropertyAll(
+                          shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -517,31 +382,99 @@ class DynamicHeightContainer extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      key: _buttonKey, // Привязываем GlobalKey к кнопке
+                      key: _buttonKey,
                       onPressed: () {
-                        _showOverlay(context);
+                        if (_buttonKey.currentContext != null) {
+                          final RenderBox button = _buttonKey.currentContext!
+                              .findRenderObject() as RenderBox;
+                          final RenderBox overlay = Overlay.of(context)
+                              .context
+                              .findRenderObject() as RenderBox;
+                          final Offset offset = button
+                              .localToGlobal(Offset.zero, ancestor: overlay);
+                          showMenu<String>(
+                            context: context,
+                            position: RelativeRect.fromLTRB(
+                                offset.dx,
+                                offset.dy,
+                                overlay.size.width - offset.dx,
+                                overlay.size.height - offset.dy),
+                            items: <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.settings_outlined,
+                                      size: 22,
+                                      color: Colors.white
+                                          .withOpacity(0.5), // changed color
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Редактировать",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white
+                                            .withOpacity(0.5), // changed color
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Helvetica",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.delete_outline,
+                                      size: 22,
+                                      color: Colors.white
+                                          .withOpacity(0.5), // changed color
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Удалить",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white
+                                            .withOpacity(0.5), // changed color
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Helvetica",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ).then((value) {
+                            if (value != null) {
+                              print(value);
+                            }
+                          });
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            WidgetStateProperty.all(const Color(0xff1e1e1e)),
-                        overlayColor: WidgetStateProperty.all(Colors.white10),
+                            MaterialStateProperty.all(const Color(0xff1e1e1e)),
+                        overlayColor: MaterialStateProperty.all(Colors.white10),
                         minimumSize:
-                            WidgetStateProperty.all(const Size(34, 34)),
-                        fixedSize: WidgetStateProperty.all(const Size(34, 34)),
-                        padding: WidgetStateProperty.all(
-                          EdgeInsets.zero,
-                        ),
-                        elevation: WidgetStateProperty.all(0),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            MaterialStateProperty.all(const Size(34, 34)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(34, 34)),
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),
                       child: const Icon(
                         Icons.more_vert,
                         size: 20,
-                        color: Colors.white,
+                        color: Colors.orange,
                       ),
                     ),
                   ],
@@ -554,293 +487,3 @@ class DynamicHeightContainer extends StatelessWidget {
     );
   }
 }
-
-// class DynamicHeightContainer extends StatelessWidget {
-//   OverlayEntry? _overlayEntry;
-
-//   bool _isHovered = false;
-
-//   void _showOverlay(BuildContext context) {
-//     final RenderBox renderBox = context.findRenderObject() as RenderBox;
-//     final offset = renderBox.localToGlobal(Offset.zero);
-
-//     _overlayEntry = OverlayEntry(
-//       builder: (context) => Positioned(
-//         top: 0,
-//         left: 0,
-//         child: Material(
-//           borderRadius: BorderRadius.circular(6),
-//           color: Colors.transparent,
-//           child: SizedBox(
-//             width: 180,
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     _overlayEntry?.remove();
-//                   },
-//                   style: ButtonStyle(
-//                     backgroundColor: WidgetStateProperty.all(
-//                       const Color(0xff262626),
-//                     ),
-//                     overlayColor: WidgetStateProperty.all(
-//                       Colors.white10,
-//                     ),
-//                     shape: const WidgetStatePropertyAll(
-//                       RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.only(
-//                           topLeft: Radius.circular(6),
-//                           topRight: Radius.circular(6),
-//                         ),
-//                       ),
-//                     ),
-//                     padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
-//                       horizontal: 0,
-//                       vertical: 16,
-//                     )),
-//                   ),
-//                   child: Row(
-//                     children: [
-//                       const SizedBox(width: 14),
-//                       Icon(
-//                         Icons.settings_outlined,
-//                         color: Colors.white.withOpacity(0.5),
-//                       ),
-//                       const SizedBox(width: 12),
-//                       Text(
-//                         "Редактировать",
-//                         style: TextStyle(
-//                           fontSize: 14,
-//                           color: Colors.white.withOpacity(0.5),
-//                           fontWeight: FontWeight.w400,
-//                           fontFamily: "Helvetica",
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     _overlayEntry?.remove();
-//                   },
-//                   style: ButtonStyle(
-//                     backgroundColor: WidgetStateProperty.all(
-//                       const Color(0xff262626),
-//                     ),
-//                     overlayColor: WidgetStateProperty.all(
-//                       Colors.white10,
-//                     ),
-//                     shape: const WidgetStatePropertyAll(
-//                       RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.only(
-//                           bottomLeft: Radius.circular(6),
-//                           bottomRight: Radius.circular(6),
-//                         ),
-//                       ),
-//                     ),
-//                     padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
-//                       horizontal: 0,
-//                       vertical: 16,
-//                     )),
-//                   ),
-//                   child: Row(
-//                     children: [
-//                       const SizedBox(width: 14),
-//                       Icon(
-//                         Icons.delete_outline,
-//                         color: Colors.white.withOpacity(0.5),
-//                       ),
-//                       const SizedBox(width: 12),
-//                       Text(
-//                         "Удалить",
-//                         style: TextStyle(
-//                           fontSize: 14,
-//                           color: Colors.white.withOpacity(0.5),
-//                           fontWeight: FontWeight.w400,
-//                           fontFamily: "Helvetica",
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//     Overlay.of(context).insert(_overlayEntry!);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (context, constraints) {
-//         double imageSize = constraints.maxWidth;
-//         return Container(
-//           decoration: const BoxDecoration(
-//             color: Color(0xff151515),
-//             borderRadius: BorderRadius.all(
-//               Radius.circular(8),
-//             ),
-//           ),
-//           child: Column(
-//             mainAxisSize: MainAxisSize
-//                 .min, // Убедитесь, что Column занимает минимальное пространство
-//             children: [
-//               // Ваши верхние элементы (например, изображение, текст и т.д.)
-//               Container(
-//                 padding: const EdgeInsets.all(6),
-//                 width: imageSize,
-//                 height: imageSize,
-//                 decoration:
-//                     BoxDecoration(borderRadius: BorderRadius.circular(8)),
-//                 child: ClipRRect(
-//                   borderRadius: BorderRadius.circular(8),
-//                   child: Image.network(
-//                     "https://illustrators.ru/uploads/product/image/16737/3082A4C6-D5D3-4CDC-8580-1CA878662A2F.jpeg",
-//                     fit: BoxFit.fitWidth,
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 13),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.only(top: 5),
-//                       child: Row(
-//                         children: [
-//                           Container(
-//                             width: 8,
-//                             height: 8,
-//                             decoration: const BoxDecoration(
-//                               color: Colors.orange,
-//                               shape: BoxShape.circle,
-//                             ),
-//                           ),
-//                           const SizedBox(width: 6),
-//                           Text(
-//                             "Черновик",
-//                             style: TextStyle(
-//                               fontSize: 12,
-//                               color: Colors.white.withOpacity(0.8),
-//                               fontWeight: FontWeight.w400,
-//                               fontFamily: "Helvetica",
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     const SizedBox(height: 10),
-//                     const Text(
-//                       "fse",
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         color: Colors.white,
-//                         fontWeight: FontWeight.w400,
-//                         fontFamily: "OpenaSans",
-//                       ),
-//                     ),
-//                     const SizedBox(height: 2),
-//                     Text(
-//                       "sefsef",
-//                       style: TextStyle(
-//                         fontSize: 14,
-//                         color: Colors.white.withOpacity(0.5),
-//                         fontWeight: FontWeight.w400,
-//                         fontFamily: "Helvetica",
-//                       ),
-//                     ),
-//                     const SizedBox(height: 8),
-//                     const Row(
-//                       children: [
-//                         TagCard(
-//                           index: 0,
-//                           value: "rap",
-//                         ),
-//                         TagCard(
-//                           index: 1,
-//                           value: "rap",
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               const Spacer(),
-//               Padding(
-//                 padding: const EdgeInsets.all(13.0),
-//                 child: Row(
-//                   children: [
-//                     Expanded(
-//                       child: ElevatedButton(
-//                         onPressed: () {},
-//                         style: ButtonStyle(
-//                           backgroundColor:
-//                               WidgetStateProperty.all(const Color(0xff1e1e1e)),
-//                           overlayColor: WidgetStateProperty.all(Colors.white10),
-//                           minimumSize:
-//                               WidgetStateProperty.all(const Size(34, 34)),
-//                           fixedSize:
-//                               WidgetStateProperty.all(const Size(34, 34)),
-//                           padding: WidgetStateProperty.all(
-//                             EdgeInsets.zero,
-//                           ),
-//                           shape: WidgetStatePropertyAll(
-//                             RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(8),
-//                             ),
-//                           ),
-//                         ),
-//                         child: const Text(
-//                           "Редактировать",
-//                           style: TextStyle(
-//                             fontSize: 14,
-//                             color: Colors.white,
-//                             fontWeight: FontWeight.w400,
-//                             fontFamily: "Helvetica",
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     const SizedBox(width: 8),
-//                     ElevatedButton(
-//                       onPressed: () {
-//                         _showOverlay(context);
-//                       },
-//                       style: ButtonStyle(
-//                         backgroundColor:
-//                             WidgetStateProperty.all(const Color(0xff1e1e1e)),
-//                         overlayColor: WidgetStateProperty.all(Colors.white10),
-//                         minimumSize:
-//                             WidgetStateProperty.all(const Size(34, 34)),
-//                         fixedSize: WidgetStateProperty.all(const Size(34, 34)),
-//                         padding: WidgetStateProperty.all(
-//                           EdgeInsets.zero,
-//                         ),
-//                         elevation: WidgetStateProperty.all(0),
-//                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-//                           RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(8.0),
-//                           ),
-//                         ),
-//                       ),
-//                       child: const Icon(
-//                         Icons.more_vert,
-//                         size: 20,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

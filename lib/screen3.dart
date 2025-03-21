@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:vibeat_web/widgets/conditions_widget.dart';
-import 'package:vibeat_web/widgets/license_cart_widget.dart';
 
 @RoutePage()
 class Screenn3Page extends StatefulWidget {

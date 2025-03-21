@@ -23,11 +23,11 @@ class AppRouter extends RootStackRouter {
             CustomRoute(
               path: 'r2',
               page: Routen2Route.page,
+              initial: true,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),
             CustomRoute(
               path: 'r3',
-              initial: true,
               page: Routen3Route.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),

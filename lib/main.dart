@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'app_router.dart';
 
 void main() {
-  runApp(MyAppPage());
+  runApp(Portal(child: MyAppPage()));
 }
 
 class MyAppPage extends StatelessWidget {
@@ -17,6 +18,9 @@ class MyAppPage extends StatelessWidget {
       routerConfig: _appRouter.config(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        popupMenuTheme: const PopupMenuThemeData(
+          color: Color(0xff151515),
+        ),
       ),
     );
   }
