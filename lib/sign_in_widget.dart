@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vibeat_web/app_router.dart';
 import 'package:vibeat_web/widgets/primary_button.dart';
 
@@ -16,6 +20,45 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController textController1 = TextEditingController();
   final TextEditingController textController2 = TextEditingController();
   bool _isPasswordVisible = false;
+
+  final dio = Dio();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ],
+    clientId: 'YOUR_CLIENT_ID.apps.googleusercontent.com', // для веб-приложений
+  );
+
+  String _message = '';
+
+  Future<void> _handleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final response = await dio.post(
+        'http://localhost:3000/auth/google/callback',
+        data: {
+          'code': googleAuth.accessToken,
+        },
+      );
+
+      final responseData = json.decode(response.data);
+      setState(() {
+        _message =
+            'Успешная авторизация: ${googleUser.email}\nТокен сервера: ${responseData['token']}';
+      });
+    } catch (error) {
+      setState(() {
+        _message = 'Ошибка авторизации: $error';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +298,9 @@ class _SignInPageState extends State<SignInPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleSignIn();
+                        },
                         icon: SvgPicture.asset(
                           'assets/icons/google.svg',
                         ),
