@@ -218,7 +218,12 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   const SizedBox(height: 20),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      context.router.pushAndPopUntil(
+                        const SignUpRoute(),
+                        predicate: (_) => false,
+                      );
+                    },
                     child: Text(
                       'Зарегистрироваться',
                       textAlign: TextAlign.center,

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/sign_in_widget.dart';
+import 'package:vibeat_web/sign_up_widget.dart';
 
 import 'screen1.dart';
 import 'screen2.dart';
@@ -19,6 +20,13 @@ class AppRouter extends RootStackRouter {
           path: '/signIn',
           initial: true,
           page: SignInRoute.page,
+        ),
+        AutoRoute(
+          type: const RouteType.custom(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+          ),
+          path: '/signUp',
+          page: SignUpRoute.page,
         ),
         AutoRoute(
           path: '/app',

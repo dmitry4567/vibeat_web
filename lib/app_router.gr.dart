@@ -103,3 +103,22 @@ class SignInRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [SignUpPage]
+class SignUpRoute extends PageRouteInfo<void> {
+  const SignUpRoute({List<PageRouteInfo>? children})
+      : super(
+          SignUpRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignUpRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignUpPage();
+    },
+  );
+}
