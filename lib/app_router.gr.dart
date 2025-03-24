@@ -29,6 +29,25 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [LicensePage]
+class LicenseRoute extends PageRouteInfo<void> {
+  const LicenseRoute({List<PageRouteInfo>? children})
+      : super(
+          LicenseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LicenseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LicensePage();
+    },
+  );
+}
+
+/// generated route for
 /// [Screenn1Page]
 class Routen1Route extends PageRouteInfo<void> {
   const Routen1Route({List<PageRouteInfo>? children})

@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vibeat_web/app_router.dart';
-import 'package:vibeat_web/sign_in_widget.dart';
 import 'package:vibeat_web/widgets/primary_button.dart';
 import 'package:vibeat_web/widgets/toggle_icon_widget.dart';
 

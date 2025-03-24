@@ -301,7 +301,8 @@ class DynamicHeightContainer extends StatelessWidget {
                             onPressed: () {
                               if (_overlayEntry != null) {
                                 _overlayEntry!.remove();
-                                _overlayEntry = null; // Set to null after removing
+                                _overlayEntry =
+                                    null; // Set to null after removing
                               }
                             },
                             style: ButtonStyle(
@@ -319,7 +320,8 @@ class DynamicHeightContainer extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
+                              padding: const WidgetStatePropertyAll(
+                                  EdgeInsets.symmetric(
                                 horizontal: 0,
                                 vertical: 18,
                               )),
@@ -350,7 +352,8 @@ class DynamicHeightContainer extends StatelessWidget {
                             onPressed: () {
                               if (_overlayEntry != null) {
                                 _overlayEntry?.remove();
-                                _overlayEntry = null; // Set to null after removing
+                                _overlayEntry =
+                                    null; // Set to null after removing
                               }
                             },
                             style: ButtonStyle(
@@ -368,7 +371,8 @@ class DynamicHeightContainer extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(
+                              padding: const WidgetStatePropertyAll(
+                                  EdgeInsets.symmetric(
                                 horizontal: 0,
                                 vertical: 16,
                               )),

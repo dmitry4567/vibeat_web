@@ -77,4 +77,18 @@ class Responsive extends StatelessWidget {
     }
     return 0.48;
   }
+
+  static int licenseCrossAxisCount(double screenWidth) {
+    if (screenWidth <= 1440) {
+      return 1;
+    }
+    return 2;
+  }
+
+  static double licenseChildAspectRatio(double screenWidth) {
+    if (screenWidth <= 1440) {
+      return 3.3;
+    }
+    return 1.8;
+  }
 }
