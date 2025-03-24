@@ -19,6 +19,7 @@ class AppRouter extends RootStackRouter {
             transitionsBuilder: TransitionsBuilders.noTransition,
           ),
           path: '/signIn',
+          initial: true,
           page: SignInRoute.page,
         ),
         AutoRoute(
@@ -33,7 +34,6 @@ class AppRouter extends RootStackRouter {
           type: const RouteType.custom(
             transitionsBuilder: TransitionsBuilders.noTransition,
           ),
-          initial: true,
           page: HomeRoute.page,
           children: [
             AutoRoute(
