@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'app_router.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
+  setUrlStrategy(PathUrlStrategy());
   runApp(MyAppPage());
 }
 
@@ -16,6 +18,7 @@ class MyAppPage extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: _appRouter.config(),
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xff0C0C0C),
         primarySwatch: Colors.blue,
       ),
     );
