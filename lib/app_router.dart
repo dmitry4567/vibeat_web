@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:vibeat_web/license_widget.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/sign_in_widget.dart';
 import 'package:vibeat_web/sign_up_widget.dart';
@@ -18,7 +19,6 @@ class AppRouter extends RootStackRouter {
             transitionsBuilder: TransitionsBuilders.noTransition,
           ),
           path: '/signIn',
-          initial: true,
           page: SignInRoute.page,
         ),
         AutoRoute(
@@ -33,11 +33,11 @@ class AppRouter extends RootStackRouter {
           type: const RouteType.custom(
             transitionsBuilder: TransitionsBuilders.noTransition,
           ),
+          initial: true,
           page: HomeRoute.page,
           children: [
             AutoRoute(
               path: 'r1',
-              initial: true,
               type: const RouteType.custom(
                 transitionsBuilder: TransitionsBuilders.noTransition,
               ),
@@ -52,7 +52,13 @@ class AppRouter extends RootStackRouter {
               path: 'r3',
               page: Routen3Route.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
-            )
+            ),
+            CustomRoute(
+              path: 'license',
+              initial: true,
+              page: LicenseRoute.page,
+              transitionsBuilder: TransitionsBuilders.noTransition,
+            ),
           ],
         ),
       ];
