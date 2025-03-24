@@ -2,20 +2,42 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vibeat_web/app_router.dart';
-import 'package:vibeat_web/wgot idgets/primary_button.dart';
+import 'package:vibeat_web/sign_in_widget.dart';
+import 'package:vibeat_web/widgets/primary_button.dart';
+import 'package:vibeat_web/widgets/toggle_icon_widget.dart';
 
 @RoutePage()
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-  final TextEditingController textController1 = TextEditingController();
-  final TextEditingController textController2 = TextEditingController();
-  bool _isPasswordVisible = false;
+class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController? textController1;
+  TextEditingController? textController2;
+
+  late bool passwordVisibility;
+  late bool againPasswordVisibility;
+  late bool privacyLicenseBool;
+
+  @override
+  void initState() {
+    super.initState();
+    textController1 = TextEditingController();
+    textController2 = TextEditingController();
+    passwordVisibility = false;
+    againPasswordVisibility = false;
+    privacyLicenseBool = false;
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                 children: [
                   const Text(
-                    "Авторизация",
+                    "Регистрация",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -57,6 +79,66 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
+                  TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    controller: textController1,
+                    obscureText: false,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      hintText: 'Никнейм',
+                      hintStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.4),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Helvetica',
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xff8D40FF),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xff262626),
+                      contentPadding: const EdgeInsets.only(
+                        left: 12,
+                        right: 12,
+                        top: 7,
+                        bottom: 7,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      height: 1,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'OpenSans',
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     controller: textController1,
@@ -120,13 +202,13 @@ class _SignInPageState extends State<SignInPage> {
                   TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     controller: textController2,
-                    obscureText: !_isPasswordVisible,
+                    obscureText: !passwordVisibility,
                     autofocus: false,
                     decoration: InputDecoration(
                       hintText: 'Пароль',
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isPasswordVisible
+                          passwordVisibility
                               ? Icons.visibility
                               : Icons.visibility_off,
                           color: Colors.white.withOpacity(0.4),
@@ -134,7 +216,7 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         onPressed: () {
                           setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
+                            passwordVisibility = !passwordVisibility;
                           });
                         },
                       ),
@@ -182,12 +264,154 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 16,
                       height: 1,
                       fontWeight: FontWeight.w400,
-                      fontFamily: 'Helvetica',
+                      fontFamily: 'OpenSans',
                     ),
                     keyboardType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    controller: textController2,
+                    obscureText: !passwordVisibility,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      hintText: 'Повторите пароль',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          passwordVisibility
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.white.withOpacity(0.4),
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisibility = !passwordVisibility;
+                          });
+                        },
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.4),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Helvetica',
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xff8D40FF),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xff262626),
+                      contentPadding: const EdgeInsets.only(
+                        left: 12,
+                        right: 12,
+                        top: 7,
+                        bottom: 7,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      height: 1,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'OpenSans',
+                    ),
+                    keyboardType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 10),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ToggleIcon(
+                            onPressed: () {
+                              setState(() {
+                                privacyLicenseBool = !privacyLicenseBool;
+                              });
+                            },
+                            value: privacyLicenseBool,
+                            onIcon: const Icon(
+                              Icons.check_box,
+                              color: Color(0xff8D40FF),
+                              size: 20,
+                            ),
+                            offIcon: Icon(
+                              Icons.check_box_outline_blank,
+                              color: privacyLicenseBool
+                                  ? const Color(0xff8D40FF)
+                                  : Colors.white.withOpacity(0.5),
+                              size: 20,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 10, 0, 0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Настоящим подтверждаю, что я ознакомлен и согласен с условиями ',
+                                    style: TextStyle(
+                                      fontFamily: 'Helvetica',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: const Text(
+                                      'политики конфиденциальности',
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Color(0xff8D40FF),
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.4,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: Color(0xff8D40FF),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -196,11 +420,11 @@ class _SignInPageState extends State<SignInPage> {
                     child: FFButtonWidget(
                       onPressed: () {
                         context.router.pushAndPopUntil(
-                          const HomeRoute(),
+                          const SignInRoute(),
                           predicate: (_) => false,
                         );
                       },
-                      text: 'Войти',
+                      text: 'Зарегистрироваться',
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: double.infinity,
@@ -218,9 +442,14 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   const SizedBox(height: 20),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      context.router.pushAndPopUntil(
+                        const SignInRoute(),
+                        predicate: (_) => false,
+                      );
+                    },
                     child: Text(
-                      'Зарегистрироваться',
+                      'Уже есть аккаунт?',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.4),
@@ -232,20 +461,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      "Я забыл пароль",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Helvetica',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
