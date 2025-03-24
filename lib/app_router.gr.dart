@@ -61,7 +61,7 @@ class Routen2Route extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return Screenn2Page();
+      return const Screenn2Page();
     },
   );
 }
@@ -81,6 +81,25 @@ class Routen3Route extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const Screenn3Page();
+    },
+  );
+}
+
+/// generated route for
+/// [SignInPage]
+class SignInRoute extends PageRouteInfo<void> {
+  const SignInRoute({List<PageRouteInfo>? children})
+      : super(
+          SignInRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignInPage();
     },
   );
 }

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:vibeat_web/main.dart';
+import 'package:vibeat_web/sign_in_widget.dart';
 
 import 'screen1.dart';
 import 'screen2.dart';
@@ -12,13 +13,27 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
-          path: '/',
+          type: const RouteType.custom(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+          ),
+          path: '/signIn',
+          initial: true,
+          page: SignInRoute.page,
+        ),
+        AutoRoute(
+          path: '/app',
+          type: const RouteType.custom(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+          ),
           page: HomeRoute.page,
           children: [
-            CustomRoute(
+            AutoRoute(
               path: 'r1',
+              initial: true,
+              type: const RouteType.custom(
+                transitionsBuilder: TransitionsBuilders.noTransition,
+              ),
               page: Routen1Route.page,
-              transitionsBuilder: TransitionsBuilders.noTransition,
             ),
             CustomRoute(
               path: 'r2',
@@ -27,10 +42,9 @@ class AppRouter extends RootStackRouter {
             ),
             CustomRoute(
               path: 'r3',
-              initial: true,
               page: Routen3Route.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
-            ),
+            )
           ],
         ),
       ];
