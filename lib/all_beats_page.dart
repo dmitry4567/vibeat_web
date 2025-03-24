@@ -1,15 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:vibeat_web/app_router.dart';
 import 'package:vibeat_web/responsive.dart';
 import 'package:vibeat_web/widgets/tag_widget.dart';
 
 @RoutePage()
-class Screenn2Page extends StatefulWidget {
-  const Screenn2Page({super.key});
+class AllBeatsPage extends StatefulWidget {
+  const AllBeatsPage({super.key});
 
   @override
-  State<Screenn2Page> createState() => _Screenn2PageState();
+  State<AllBeatsPage> createState() => _AllBeatsPageState();
 }
 
 class CategoryType {
@@ -20,7 +21,7 @@ class CategoryType {
   CategoryType({required this.index, required this.color, required this.value});
 }
 
-class _Screenn2PageState extends State<Screenn2Page> {
+class _AllBeatsPageState extends State<AllBeatsPage> {
   String? selectedValue;
   final List<CategoryType> items = [
     CategoryType(index: 1, color: Colors.grey, value: "Черновик"),
@@ -299,10 +300,11 @@ class DynamicHeightContainer extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
+                              context.router.push(const EditBeatRoute());
+
                               if (_overlayEntry != null) {
                                 _overlayEntry!.remove();
-                                _overlayEntry =
-                                    null; // Set to null after removing
+                                _overlayEntry = null;
                               }
                             },
                             style: ButtonStyle(
@@ -517,7 +519,9 @@ class DynamicHeightContainer extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.router.push(const EditBeatRoute());
+                        },
                         style: ButtonStyle(
                           backgroundColor:
                               WidgetStateProperty.all(const Color(0xff1e1e1e)),

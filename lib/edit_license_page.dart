@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:vibeat_web/widgets/conditions_widget.dart';
 
 @RoutePage()
-class Screenn3Page extends StatefulWidget {
-  const Screenn3Page({super.key});
+class EditLicensePage extends StatefulWidget {
+  const EditLicensePage({super.key});
 
   @override
-  State<Screenn3Page> createState() => _Screenn3PageState();
+  State<EditLicensePage> createState() => _EditLicensePageState();
 }
 
-class _Screenn3PageState extends State<Screenn3Page> {
+class _EditLicensePageState extends State<EditLicensePage> {
   bool highlighted1 = false;
-
   bool _checkbox = false;
 
   @override
@@ -33,14 +32,68 @@ class _Screenn3PageState extends State<Screenn3Page> {
                 fontFamily: "Helvetica",
               ),
             ),
-            const Text(
-              "Редактирование лицезнзии",
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Helvetica",
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Редактирование лицензии",
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Helvetica",
+                  ),
+                ),
+                Row(
+                  children: [
+                    MaterialButton(
+                      height: 44,
+                      onPressed: () {
+                        context.router.popForced();
+                      },
+                      color: const Color(0xff1E1E1E),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 22,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "Удалить",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontFamily: "OpenSans",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    MaterialButton(
+                      height: 44,
+                      onPressed: () {
+                        context.router.popForced();
+                      },
+                      color: const Color(0xff8D40FF),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 22,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "Сохранить",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontFamily: "OpenSans",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             const SizedBox(height: 32),
             Visibility(

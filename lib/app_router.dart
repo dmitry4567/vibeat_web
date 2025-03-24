@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:vibeat_web/license_widget.dart';
+import 'package:vibeat_web/all_license_page.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/sign_in_widget.dart';
 import 'package:vibeat_web/sign_up_widget.dart';
 
-import 'screen1.dart';
-import 'screen2.dart';
-import 'screen3.dart';
+import 'edit_beat_page.dart';
+import 'all_beats_page.dart';
+import 'edit_license_page.dart';
 
 part 'app_router.gr.dart'; // Генерируемый файл
 
@@ -37,27 +37,29 @@ class AppRouter extends RootStackRouter {
           page: HomeRoute.page,
           children: [
             AutoRoute(
-              path: 'r1',
+              path: 'editBeat',
               type: const RouteType.custom(
                 transitionsBuilder: TransitionsBuilders.noTransition,
               ),
-              page: Routen1Route.page,
+              page: EditBeatRoute.page,
             ),
             CustomRoute(
-              path: 'r2',
-              page: Routen2Route.page,
-              transitionsBuilder: TransitionsBuilders.noTransition,
-            ),
-            CustomRoute(
-              path: 'r3',
-              page: Routen3Route.page,
-              transitionsBuilder: TransitionsBuilders.noTransition,
-            ),
-            CustomRoute(
-              path: 'license',
+              path: 'allBeats',
+              page: AllBeatsRoute.page,
               initial: true,
-              page: LicenseRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
+            ),
+            CustomRoute(
+              path: 'allLicense',
+              page: AllLicenseRoute.page,
+              transitionsBuilder: TransitionsBuilders.noTransition,
+            ),
+            AutoRoute(
+              path: 'editLicense',
+              type: const RouteType.custom(
+                transitionsBuilder: TransitionsBuilders.noTransition,
+              ),
+              page: EditLicenseRoute.page,
             ),
           ],
         ),

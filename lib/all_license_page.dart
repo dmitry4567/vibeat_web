@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:vibeat_web/app_router.dart';
 import 'package:vibeat_web/responsive.dart';
 
 @RoutePage()
-class LicensePage extends StatefulWidget {
-  const LicensePage({super.key});
+class AllLicensePage extends StatefulWidget {
+  const AllLicensePage({super.key});
 
   @override
-  State<LicensePage> createState() => _LicensePageState();
+  State<AllLicensePage> createState() => _AllLicensePageState();
 }
 
 class CategoryType {
@@ -18,7 +19,7 @@ class CategoryType {
   CategoryType({required this.index, required this.color, required this.value});
 }
 
-class _LicensePageState extends State<LicensePage> {
+class _AllLicensePageState extends State<AllLicensePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +59,8 @@ class _LicensePageState extends State<LicensePage> {
                 crossAxisCount: Responsive.licenseCrossAxisCount(
                   MediaQuery.of(context).size.width,
                 ),
-                crossAxisSpacing: 20.0,
-                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
                 childAspectRatio: Responsive.licenseChildAspectRatio(
                   MediaQuery.of(context).size.width,
                 ),
@@ -103,7 +104,9 @@ class _LicensePageState extends State<LicensePage> {
                               ],
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.router.push(const EditLicenseRoute());
+                              },
                               icon: const Icon(
                                 Icons.settings,
                                 color: Color(0xff5F6368),
@@ -127,12 +130,12 @@ class _LicensePageState extends State<LicensePage> {
                                   icon: Icons.mic_none_outlined,
                                   title: "Используется для записи\nмузыки",
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 32),
                                 LicenseData(
                                   icon: Icons.copy,
                                   title: "Безлимитное\nраспространение",
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 32),
                                 LicenseData(
                                   icon: Icons.video_camera_back,
                                   title:
@@ -147,12 +150,12 @@ class _LicensePageState extends State<LicensePage> {
                                   icon: Icons.mic_none_outlined,
                                   title: "Используется для записи\nмузыки",
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 32),
                                 LicenseData(
                                   icon: Icons.copy,
                                   title: "Безлимитно\nраспространение",
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 32),
                                 LicenseData(
                                   icon: Icons.video_camera_back,
                                   title:

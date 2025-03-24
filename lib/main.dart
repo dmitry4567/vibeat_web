@@ -136,11 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    context.router.replaceNamed('r2');
+                    context.router.replaceNamed('allBeats');
                   },
                   elevation: 0,
                   hoverColor: Colors.white12,
-                  color: Colors.white12,
+                  // color: Colors.white12,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
                     vertical: 18,
@@ -165,7 +165,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    context.router.replaceNamed('r1');
+                    context.router.replaceNamed('allLicense');
+                  },
+                  elevation: 0,
+                  hoverColor: Colors.white12,
+                  // color: Colors.white12,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 18,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Row(
+                    children: [
+                      SizedBox(width: 10), // Отступ слева
+                      Text(
+                        'Лицензии',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontFamily: "Helvetica",
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    // context.router.replaceNamed('');
                   },
                   elevation: 0,
                   hoverColor: Colors.white12,

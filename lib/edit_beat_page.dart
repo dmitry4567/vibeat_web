@@ -11,14 +11,14 @@ import 'package:vibeat_web/widgets/license_cart_widget.dart';
 import 'package:vibeat_web/widgets/tag_widget.dart';
 
 @RoutePage()
-class Screenn1Page extends StatefulWidget {
-  const Screenn1Page({super.key});
+class EditBeatPage extends StatefulWidget {
+  const EditBeatPage({super.key});
 
   @override
-  State<Screenn1Page> createState() => _Screenn1PageState();
+  State<EditBeatPage> createState() => _EditBeatPageState();
 }
 
-class _Screenn1PageState extends State<Screenn1Page> {
+class _EditBeatPageState extends State<EditBeatPage> {
   Dio dio = Dio();
 
   late DropzoneViewController controller1;
@@ -188,7 +188,9 @@ class _Screenn1PageState extends State<Screenn1Page> {
                   children: [
                     MaterialButton(
                       height: 44,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.router.popForced();
+                      },
                       color: const Color(0xff1E1E1E),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 22,

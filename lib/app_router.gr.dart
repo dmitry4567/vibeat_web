@@ -10,6 +10,82 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AllBeatsPage]
+class AllBeatsRoute extends PageRouteInfo<void> {
+  const AllBeatsRoute({List<PageRouteInfo>? children})
+      : super(
+          AllBeatsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AllBeatsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AllBeatsPage();
+    },
+  );
+}
+
+/// generated route for
+/// [AllLicensePage]
+class AllLicenseRoute extends PageRouteInfo<void> {
+  const AllLicenseRoute({List<PageRouteInfo>? children})
+      : super(
+          AllLicenseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AllLicenseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AllLicensePage();
+    },
+  );
+}
+
+/// generated route for
+/// [EditBeatPage]
+class EditBeatRoute extends PageRouteInfo<void> {
+  const EditBeatRoute({List<PageRouteInfo>? children})
+      : super(
+          EditBeatRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EditBeatRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EditBeatPage();
+    },
+  );
+}
+
+/// generated route for
+/// [EditLicensePage]
+class EditLicenseRoute extends PageRouteInfo<void> {
+  const EditLicenseRoute({List<PageRouteInfo>? children})
+      : super(
+          EditLicenseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EditLicenseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EditLicensePage();
+    },
+  );
+}
+
+/// generated route for
 /// [HomeScreen]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -24,82 +100,6 @@ class HomeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const HomeScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [LicensePage]
-class LicenseRoute extends PageRouteInfo<void> {
-  const LicenseRoute({List<PageRouteInfo>? children})
-      : super(
-          LicenseRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'LicenseRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const LicensePage();
-    },
-  );
-}
-
-/// generated route for
-/// [Screenn1Page]
-class Routen1Route extends PageRouteInfo<void> {
-  const Routen1Route({List<PageRouteInfo>? children})
-      : super(
-          Routen1Route.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'Routen1Route';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const Screenn1Page();
-    },
-  );
-}
-
-/// generated route for
-/// [Screenn2Page]
-class Routen2Route extends PageRouteInfo<void> {
-  const Routen2Route({List<PageRouteInfo>? children})
-      : super(
-          Routen2Route.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'Routen2Route';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const Screenn2Page();
-    },
-  );
-}
-
-/// generated route for
-/// [Screenn3Page]
-class Routen3Route extends PageRouteInfo<void> {
-  const Routen3Route({List<PageRouteInfo>? children})
-      : super(
-          Routen3Route.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'Routen3Route';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const Screenn3Page();
     },
   );
 }
