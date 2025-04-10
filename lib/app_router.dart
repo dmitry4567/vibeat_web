@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:vibeat_web/all_license_page.dart';
+import 'package:vibeat_web/anketa.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/sign_in_widget.dart';
 import 'package:vibeat_web/sign_up_widget.dart';
@@ -19,7 +20,6 @@ class AppRouter extends RootStackRouter {
             transitionsBuilder: TransitionsBuilders.noTransition,
           ),
           path: '/signIn',
-          initial: true,
           page: SignInRoute.page,
         ),
         AutoRoute(
@@ -28,6 +28,14 @@ class AppRouter extends RootStackRouter {
           ),
           path: '/signUp',
           page: SignUpRoute.page,
+        ),
+        AutoRoute(
+          type: const RouteType.custom(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+          ),
+          path: '/anketa',
+          initial: true,
+          page: AnketaRoute.page,
         ),
         AutoRoute(
           path: '/app',

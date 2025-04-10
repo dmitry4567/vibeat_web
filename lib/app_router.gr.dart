@@ -48,6 +48,25 @@ class AllLicenseRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AnketaPage]
+class AnketaRoute extends PageRouteInfo<void> {
+  const AnketaRoute({List<PageRouteInfo>? children})
+      : super(
+          AnketaRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AnketaRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AnketaPage();
+    },
+  );
+}
+
+/// generated route for
 /// [EditBeatPage]
 class EditBeatRoute extends PageRouteInfo<void> {
   const EditBeatRoute({List<PageRouteInfo>? children})
