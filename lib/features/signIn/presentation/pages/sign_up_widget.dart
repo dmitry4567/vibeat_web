@@ -439,28 +439,28 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 56,
                       child: FFButtonWidget(
                         onPressed: () {
-                           if (textController1!.text.isEmpty ||
-                                textController2!.text.isEmpty ||
-                                textController3!.text.isEmpty ||
-                                textController4!.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  setupSnackBar("Заполните все поля"));
-                            } else if (textController3!.text !=
-                                textController4!.text) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  setupSnackBar("Пароли не совпадают"));
-                            } else if (!privacyLicenseBool) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  setupSnackBar(
-                                      "Необходимо подтвердить условия политики конфиденциальности"));
-                            } else {
-                              context.read<AuthBloc>().add(
-                                    SignUpEmailPasswordRequested(
-                                      email: textController2!.text,
-                                      password: textController3!.text,
-                                    ),
-                                  );
-                            }
+                          if (textController1!.text.isEmpty ||
+                              textController2!.text.isEmpty ||
+                              textController3!.text.isEmpty ||
+                              textController4!.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                setupSnackBar("Заполните все поля"));
+                          } else if (textController3!.text !=
+                              textController4!.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                setupSnackBar("Пароли не совпадают"));
+                          } else if (!privacyLicenseBool) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                setupSnackBar(
+                                    "Необходимо подтвердить условия политики конфиденциальности"));
+                          } else {
+                            context.read<AuthBloc>().add(
+                                  SignUpEmailPasswordRequested(
+                                    email: textController2!.text,
+                                    password: textController3!.text,
+                                  ),
+                                );
+                          }
                         },
                         text: 'Зарегистрироваться',
                         options: FFButtonOptions(
@@ -481,10 +481,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        context.router.pushAndPopUntil(
-                          const SignInRoute(),
-                          predicate: (_) => false,
-                        );
+                        context.router.replaceAll([const SignInRoute2()]);
                       },
                       child: Text(
                         'Уже есть аккаунт?',
