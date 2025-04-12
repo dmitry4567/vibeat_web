@@ -1,12 +1,20 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:vibeat_web/app_router.dart';
+import 'package:vibeat_web/app/app_router.dart';
+import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/widgets/primary_button.dart';
+import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
+import 'package:google_sign_in_web/google_sign_in_web.dart';
+import 'package:google_sign_in_web/web_only.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
+import 'package:vibeat_web/main.dart';
+
+final storage = FlutterSecureStorageWeb();
 
 @RoutePage()
 class SignInPage extends StatefulWidget {
@@ -21,43 +29,52 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController textController2 = TextEditingController();
   bool _isPasswordVisible = false;
 
-  final dio = Dio();
-
   final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId:
+        '862400550094-hunfctlkdt0hliqmkbvevafrg5v4cjd3.apps.googleusercontent.com',
     scopes: [
       'email',
-      'https://www.googleapis.com/auth/userinfo.profile',
+      'profile',
+      'openid',
     ],
-    clientId: 'YOUR_CLIENT_ID.apps.googleusercontent.com', // для веб-приложений
+    hostedDomain: '',
   );
 
-  String _message = '';
+  final dio = d.Dio();
 
-  Future<void> _handleSignIn() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return;
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
+  Future<void> _checkAuth() async {
+    sl<GoogleSignInPlatform>().userDataEvents!.listen((event) async {
+      // Отправляем токен на сервер для верификации и получения JWT
       final response = await dio.post(
-        'http://localhost:3000/auth/google/callback',
-        data: {
-          'code': googleAuth.accessToken,
-        },
+        'https://4a39-111-96-144-229.ngrok-free.app/api/auth/google/getjwt',
+        options: d.Options(headers: {'Content-Type': 'application/json'}),
+        data: json.encode({
+          'token': event!.idToken,
+        }),
       );
 
-      final responseData = json.decode(response.data);
-      setState(() {
-        _message =
-            'Успешная авторизация: ${googleUser.email}\nТокен сервера: ${responseData['token']}';
-      });
-    } catch (error) {
-      setState(() {
-        _message = 'Ошибка авторизации: $error';
-      });
-    }
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+
+        log(responseData.toString());
+      } else {
+        await _googleSignIn.signOut();
+      }
+    });
+  }
+
+  GSIButtonConfiguration? _buttonConfiguration;
+
+  void _handleNewWebButtonConfiguration(GSIButtonConfiguration newConfig) {
+    setState(() {
+      _buttonConfiguration = newConfig;
+    });
   }
 
   @override
@@ -294,12 +311,13 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  renderButton(configuration: _buttonConfiguration),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                         onPressed: () {
-                          _handleSignIn();
+                          _checkAuth();
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/google.svg',

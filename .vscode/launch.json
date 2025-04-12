@@ -9,7 +9,9 @@
             "request": "launch",
             "args": [
                 "--web-browser-flag",
-                "--disable-web-security"
+                "--disable-web-security",
+                "--web-hostname=localhost",
+                "--web-port=7357"
             ],
             "type": "dart"
         },
@@ -27,3 +29,5 @@
         }
     ]
 }
+
+// flutter run -d chrome --web-hostname localhost --web-port 7357
