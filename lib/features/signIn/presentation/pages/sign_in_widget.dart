@@ -305,11 +305,20 @@ class _SignInPage2State extends State<SignInPage2> {
                       width: double.infinity,
                       height: 56,
                       child: FFButtonWidget(
-                        onPressed: () {
-                          // context.router.pushAndPopUntil(
-                          //   const HomeRoute(),
-                          //   predicate: (_) => false,
-                          // );
+                        onPressed: () async {
+                          if (textController1.text.isEmpty ||
+                              textController2.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              setupSnackBar('Заполните все поля'),
+                            );
+                          } else {
+                            context.read<AuthBloc>().add(
+                                  SignInEmailPasswordRequested(
+                                    email: textController1.text,
+                                    password: textController2.text,
+                                  ),
+                                );
+                          }
                         },
                         text: 'Войти',
                         options: FFButtonOptions(
@@ -330,10 +339,7 @@ class _SignInPage2State extends State<SignInPage2> {
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
-                        context.router.pushAndPopUntil(
-                          const SignUpRoute(),
-                          predicate: (_) => false,
-                        );
+                        context.replaceRoute(const SignUpRoute());
                       },
                       child: Text(
                         'Зарегистрироваться',
