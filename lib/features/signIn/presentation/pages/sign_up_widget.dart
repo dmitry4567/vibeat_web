@@ -23,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController? textController4;
 
   late bool passwordVisibility;
-  late bool againPasswordVisibility;
+  late bool passwordVisibility2;
   late bool privacyLicenseBool;
 
   @override
@@ -34,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
     textController3 = TextEditingController();
     textController4 = TextEditingController();
     passwordVisibility = false;
-    againPasswordVisibility = false;
+    passwordVisibility2 = false;
     privacyLicenseBool = false;
   }
 
@@ -296,13 +296,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextFormField(
                       textAlignVertical: TextAlignVertical.center,
                       controller: textController4,
-                      obscureText: !passwordVisibility,
+                      obscureText: !passwordVisibility2,
                       autofocus: false,
                       decoration: InputDecoration(
                         hintText: 'Повторите пароль',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            passwordVisibility
+                            passwordVisibility2
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                             color: Colors.white.withOpacity(0.4),
@@ -310,7 +310,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           onPressed: () {
                             setState(() {
-                              passwordVisibility = !passwordVisibility;
+                              passwordVisibility2 = !passwordVisibility2;
                             });
                           },
                         ),
