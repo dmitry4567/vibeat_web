@@ -30,7 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<Tuple2<UserEntity?, bool>> get jwtStream {
     return _googleSignInPlatform.userDataEvents!.asyncMap((event) async {
       final response = await _apiClient.post(
-        '/auth/google/getjwt',
+        'userca/auth/google/getjwt',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        '/login',
+        'userca/login',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        '/register',
+        'userca/register',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',

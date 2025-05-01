@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vibeat_web/all_license_page.dart';
+import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/features/anketa/presentation/pages/anketa_web.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
@@ -8,8 +10,8 @@ import 'package:vibeat_web/features/signIn/presentation/pages/sign_in_widget.dar
 import 'package:vibeat_web/features/signIn/presentation/pages/sign_up_widget.dart';
 import 'package:vibeat_web/_.dart';
 
-import '../edit_beat_page.dart';
-import '../all_beats_page.dart';
+import '../features/editBeat/presentation/pages/edit_beat_page.dart';
+import '../features/allBeats/presentation/pages/all_beats_page.dart';
 import '../edit_license_page.dart';
 
 part 'app_router.gr.dart'; // Генерируемый файл

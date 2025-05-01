@@ -18,6 +18,7 @@ dependencies:
   flutter_dropzone: ^4.2.1
   mobkit_dashed_border: ^0.0.7
   dropdown_button2: ^2.3.9
+  uuid: ^3.0.7
 
   dio: ^5.8.0+1
   google_fonts: ^6.2.1

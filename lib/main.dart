@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/features/anketa/presentation/bloc/anketa_bloc.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
 import 'app/app_router.dart';
@@ -34,8 +35,11 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => di.sl<AuthBloc>(),
         ),
+        // BlocProvider(
+        //   create: (context) => di.sl<AnketaBloc>(),
+        // ),
         BlocProvider(
-          create: (context) => di.sl<AnketaBloc>(),
+          create: (context) => di.sl<AllBeatBloc>(),
         ),
       ],
       child: MyAppPage(),

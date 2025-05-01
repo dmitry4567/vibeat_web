@@ -6,12 +6,23 @@ import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
 import 'package:vibeat_web/core/api/auth_interceptor.dart';
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/core/network/network_info.dart';
+import 'package:vibeat_web/features/allBeats/data/datasource/all_beats_remote_data_sourse.dart';
+import 'package:vibeat_web/features/allBeats/data/repositories/all_beats_repository_impl.dart';
+import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
+import 'package:vibeat_web/features/allBeats/domain/repositories/all_beats_repositories.dart';
+import 'package:vibeat_web/features/allBeats/domain/usecases/get_all_beats.dart';
+import 'package:vibeat_web/features/allBeats/domain/usecases/make_empty_beat.dart';
+import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/features/anketa/data/datasource/anketa_remote_data_sourse.dart';
 import 'package:vibeat_web/features/anketa/data/repositories/anketa_repository_impl.dart';
 import 'package:vibeat_web/features/anketa/domain/repositories/anketa_repositories.dart';
 import 'package:vibeat_web/features/anketa/domain/usecases/get_anketa.dart';
 import 'package:vibeat_web/features/anketa/domain/usecases/send_anketa_response.dart';
 import 'package:vibeat_web/features/anketa/presentation/bloc/anketa_bloc.dart';
+import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
+import 'package:vibeat_web/features/editBeat/data/repositories/edit_beat_repository_impl.dart';
+import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
+import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
 import '../features/signIn/data/repositories/auth_repository_impl.dart';
@@ -59,8 +70,8 @@ Future<void> init() async {
 
   // Initialize API Client
   final apiClient = sl<ApiClient>();
-  await apiClient.initialize('http://192.168.0.135:7773/api');
-  // await apiClient.initialize('http://172.20.10.4:3000');
+  await apiClient.initialize('http://192.168.0.135:8080/');
+  // await apiClient.initialize('http://172.20.10.2:8080/');
 
   // Add auth interceptor
   sl<Dio>().interceptors.add(sl<AuthInterceptor>());
@@ -71,6 +82,16 @@ Future<void> init() async {
         getAnketa: sl(),
         sendAnketaResponse: sl(),
       ));
+  sl.registerFactory(() => AllBeatBloc(
+        getAllBeats: sl(),
+        makeEmptyBeat: sl(),
+      ));
+  sl.registerFactoryParam<EditBeatBloc, BeatEntity, bool>(
+    (beat, isEditMode) => EditBeatBloc(
+      beat: beat,
+      isEditMode: isEditMode,
+    ),
+  );
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -88,12 +109,35 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<AllBeatRepository>(
+    () => AllBeatRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton<EditBeatRepository>(
+    () => EditBeatRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
+
   // Use cases
   sl.registerLazySingleton(() => GetAnketa(sl()));
   sl.registerLazySingleton(() => SendAnketaResponse(sl()));
+  sl.registerLazySingleton(() => GetAllBeats(sl()));
+  sl.registerLazySingleton(() => MakeEmptyBeat(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(
     () => AnketaRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  sl.registerLazySingleton<AllBeatRemoteDataSource>(
+    () => AllBeatRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  sl.registerLazySingleton<EditBeatRemoteDataSource>(
+    () => EditBeatRemoteDataSourceImpl(apiClient: sl()),
   );
 }

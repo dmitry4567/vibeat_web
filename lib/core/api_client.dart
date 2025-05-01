@@ -32,7 +32,8 @@ class ApiClient {
         return handler.next(options);
       },
       onResponse: (response, handler) {
-        logger.i('Response: ${response.statusCode} ${response.requestOptions.uri}');
+        logger.i(
+            'Response: ${response.statusCode} ${response.requestOptions.uri}');
         logger.v('Response data: ${response.data}');
         return handler.next(response);
       },
@@ -55,16 +56,22 @@ class ApiClient {
     ));
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, required Options options}) async {
+  Future<Response> get(String path,
+      {Map<String, dynamic>? queryParameters, required Options options}) async {
     return dio.get(path, queryParameters: queryParameters);
   }
 
-  Future<Response> post(String path, {dynamic data, required Options options}) async {
+  Future<Response> post(String path,
+      {dynamic data, required Options options}) async {
     return dio.post(path, data: data);
   }
 
   Future<Response> put(String path, {dynamic data}) async {
     return dio.put(path, data: data);
+  }
+
+  Future<Response> patch(String path, {dynamic data}) async {
+    return dio.patch(path, data: data);
   }
 
   Future<Response> delete(String path, {dynamic data}) async {
