@@ -49,16 +49,17 @@ class BeatEntity extends Equatable {
               ?.map((mood) => MoodEntity.fromJson(mood as Map<String, dynamic>))
               .toList() ??
           [],
-      key: KeyEntity.fromJson(
-        json['key'] as Map<String, dynamic>,
-      ),
+      // key: KeyEntity.fromJson(
+      //   json['keynote_id'] as Map<String, dynamic>,
+      // ),
+      key: KeyEntity(id: 1, name: "name"),
       status: StatusBeat.values
           .firstWhere((e) => e.toString() == 'StatusBeat.${json['status']}'),
       availableFiles: AvailableFilesEntity.fromJson(
         json['AvailableFiles'] as Map<String, dynamic>,
       ),
       bpm: json['bpm'] as int,
-      createdAt: json['createdAt'] as int,
+      createdAt: json['created_at'] as int,
     );
   }
   BeatEntity copyWith({

@@ -81,4 +81,19 @@ class AllBeatRepositoryImpl implements AllBeatRepository {
       return Left(ServerFailure('No Internet Connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteBeat(String beatId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final data = await remoteDataSource.deleteBeat(beatId);
+
+        return Right(data);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      }
+    } else {
+      return Left(ServerFailure('No Internet Connection'));
+    }
+  }
 }

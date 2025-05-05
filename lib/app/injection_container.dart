@@ -10,6 +10,7 @@ import 'package:vibeat_web/features/allBeats/data/datasource/all_beats_remote_da
 import 'package:vibeat_web/features/allBeats/data/repositories/all_beats_repository_impl.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/allBeats/domain/repositories/all_beats_repositories.dart';
+import 'package:vibeat_web/features/allBeats/domain/usecases/delete_beat.dart';
 import 'package:vibeat_web/features/allBeats/domain/usecases/get_all_beats.dart';
 import 'package:vibeat_web/features/allBeats/domain/usecases/make_empty_beat.dart';
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
@@ -85,6 +86,7 @@ Future<void> init() async {
   sl.registerFactory(() => AllBeatBloc(
         getAllBeats: sl(),
         makeEmptyBeat: sl(),
+        deleteBeat: sl()
       ));
   sl.registerFactoryParam<EditBeatBloc, BeatEntity, bool>(
     (beat, isEditMode) => EditBeatBloc(
@@ -127,6 +129,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SendAnketaResponse(sl()));
   sl.registerLazySingleton(() => GetAllBeats(sl()));
   sl.registerLazySingleton(() => MakeEmptyBeat(sl()));
+  sl.registerLazySingleton(() => DeleteBeat(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(

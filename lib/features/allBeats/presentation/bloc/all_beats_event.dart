@@ -11,4 +11,12 @@ class GetAllBeatEvent extends AllBeatEvent {}
 
 class MakeEmptyBeatEvent extends AllBeatEvent {}
 
+class DeleteBeatEvent extends AllBeatEvent {
+  final String beatId;
+
+  const DeleteBeatEvent({required this.beatId});
+}
+
+class ResetDeleteBeatSuccessEvent extends AllBeatEvent {}
+
 class ResetMakeEmptyBeatSuccessEvent extends AllBeatEvent {}

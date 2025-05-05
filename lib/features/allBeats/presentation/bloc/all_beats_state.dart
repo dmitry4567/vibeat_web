@@ -6,6 +6,7 @@ class AllBeatState extends Equatable {
   final AllBeatsStatus? status;
   final List<BeatEntity>? beats;
   final bool? makeEmptyBeatSuccess;
+  final bool? deleteBeatSuccess;
   final String? errorMessage;
   final BeatEntity? newBeat;
 
@@ -13,6 +14,7 @@ class AllBeatState extends Equatable {
     this.status,
     this.beats,
     this.makeEmptyBeatSuccess,
+    this.deleteBeatSuccess,
     this.errorMessage,
     this.newBeat,
   });
@@ -21,6 +23,7 @@ class AllBeatState extends Equatable {
     AllBeatsStatus? status,
     List<BeatEntity>? beats,
     bool? makeEmptyBeatSuccess,
+    bool? deleteBeatSuccess,
     String? errorMessage,
     BeatEntity? newBeat,
   }) {
@@ -28,6 +31,7 @@ class AllBeatState extends Equatable {
       status: status ?? this.status,
       beats: beats ?? this.beats,
       makeEmptyBeatSuccess: makeEmptyBeatSuccess ?? this.makeEmptyBeatSuccess,
+      deleteBeatSuccess: deleteBeatSuccess ?? this.deleteBeatSuccess,
       errorMessage: errorMessage ?? this.errorMessage,
       newBeat: newBeat ?? this.newBeat,
     );
@@ -38,6 +42,7 @@ class AllBeatState extends Equatable {
         status,
         beats,
         makeEmptyBeatSuccess,
+        deleteBeatSuccess,
         errorMessage,
         newBeat,
       ];

@@ -7,6 +7,7 @@ import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 abstract class AllBeatRemoteDataSource {
   Future<List<BeatModel>> getAllBeats();
   Future<BeatEntity> makeEmptyBeat();
+  Future<bool> deleteBeat(String beatId);
 }
 
 class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
@@ -97,5 +98,22 @@ class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
     }
 
     throw Exception('Failed to create beat');
+  }
+
+  @override
+  Future<bool> deleteBeat(String beatId) async {
+    final data = await _apiClient.delete(
+      'unpbeats/deleteUnpublishedBeatById/$beatId',
+    );
+
+    if (data.statusCode != 200) {
+      throw Exception('Failed to delete beat');
+    }
+
+    if (data.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -68,11 +68,14 @@ class _AllBeatsPageState extends State<AllBeatsPage> {
           ScaffoldMessenger.of(context)
               .showSnackBar(setupSnackBar(state.errorMessage!));
         }
-        if (state.makeEmptyBeatSuccess == true) { 
+        if (state.makeEmptyBeatSuccess == true) {
           context.read<AllBeatBloc>().add(ResetMakeEmptyBeatSuccessEvent());
 
           context.router
               .push(EditBeatRoute(beat: state.newBeat!, isEditMode: true));
+        }
+        if (state.deleteBeatSuccess == true) {
+          context.read<AllBeatBloc>().add(ResetDeleteBeatSuccessEvent());
         }
       },
       child: Scaffold(
@@ -452,9 +455,12 @@ class DynamicHeightContainer extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
                               if (_overlayEntry != null) {
+                                context
+                                    .read<AllBeatBloc>()
+                                    .add(DeleteBeatEvent(beatId: beat.id));
+
                                 _overlayEntry?.remove();
-                                _overlayEntry =
-                                    null; // Set to null after removing
+                                _overlayEntry = null;
                               }
                             },
                             style: ButtonStyle(
