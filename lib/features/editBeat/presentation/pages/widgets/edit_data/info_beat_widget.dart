@@ -87,7 +87,7 @@ class _GenreSelectorState extends State<GenreSelector> {
       if (!selectedGenres.any((selected) => selected.id == genre.id)) {
         selectedGenres.add(genre);
         final bloc = context.read<EditBeatBloc>();
-        bloc.add(ChangeGenres(genres: [genre]));
+        bloc.add(ChangeGenres(genres: selectedGenres));
       }
     });
   }
@@ -97,7 +97,7 @@ class _GenreSelectorState extends State<GenreSelector> {
       if (!selectedMoods.any((selected) => selected.id == mood.id)) {
         selectedMoods.add(mood);
         final bloc = context.read<EditBeatBloc>();
-        bloc.add(ChangeMoods(moods: [mood]));
+        bloc.add(ChangeMoods(moods: selectedMoods));
       }
     });
   }

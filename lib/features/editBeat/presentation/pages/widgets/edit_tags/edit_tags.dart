@@ -172,6 +172,28 @@ Future<List<TagEntity>?> tagDialog(BuildContext context) async {
               }
             }
 
+            Future<void> getTagsByName(String name) async {
+              final dio = Dio();
+              try {
+                final response = await dio.get(
+                  "http://192.168.0.135:7772/api/metadata/tags",
+                  options: Options(headers: {
+                    'Content-Type': 'application/json',
+                  }),
+                );
+
+                if (response.statusCode == 200) {
+                  // Assuming the response data is a List<String> of tag names
+                  final json = response.data['data'] as List<dynamic>;
+
+                  availableTags =
+                      json.map((tag) => TagEntity.fromJson(tag)).toList();
+                }
+              } catch (e) {
+                log('Error fetching tags: $e');
+              }
+            }
+
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 // Load tags when dialog opens
@@ -216,6 +238,8 @@ Future<List<TagEntity>?> tagDialog(BuildContext context) async {
                                     ),
                                   ),
                                   onChanged: (value) {
+                                    log(value);
+
                                     setState(() {
                                       // Filter tags based on search
                                     });

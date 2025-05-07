@@ -47,8 +47,6 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<ChangeKey>(_changeKey);
     on<ChangeBpm>(_changeBpm);
     on<SaveDraft>(_saveDraft);
-    // on<SendAnketaResponseEvent>(_onSendAnketaResponse);
-    // on<AddGenreEvent>(_onAddGenre);
   }
 
   Future<void> _addMp3File(AddMp3File event, Emitter<BeatState> emit) async {
@@ -416,44 +414,67 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
 
     final beat = currentState.beat;
 
-    final response = await dio.patch(
-      "http://192.168.0.135:7772/api/unpbeats/saveDraft",
-      data: {
-        "id": beat.id,
-        "name": beat.name,
-        "description": beat.description,
-        "tags": beat.tags
-            .map((e) => {
-                  "id": e.id,
-                })
-            .toList(),
-        "genres": beat.genres
-            .map((e) => {
-                  "id": e.id,
-                })
-            .toList(),
-        "moods": beat.moods
-            .map((e) => {
-                  "id": e.id,
-                })
-            .toList(),
-        "keynoteId": beat.key.id,
-        "bpm": beat.bpm,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
+    final Map<String, dynamic> requestData = {
+      "id": beat.id,
+    };
 
-    if (response.statusCode == 200) {
-      final currentState = state as BeatEditState;
+    if (beat.name != "") {
+      requestData["name"] = beat.name;
+    }
 
-      log("update beat");
+    if (beat.description != "") {
+      requestData["description"] = beat.description;
+    }
 
-      emit(currentState.copyWith(
-        isSavedSuccess: true,
-      ));
-      // emit(currentState.copyWith(beat: currentState.beat));
+    if (beat.tags.isNotEmpty) {
+      requestData["tags"] = beat.tags.map((e) => {"id": e.id}).toList();
+    } else {
+      requestData["tags"] = [];
+    }
+
+    if (beat.genres.isNotEmpty) {
+      requestData["genres"] = beat.genres.map((e) => {"id": e.id}).toList();
+    } else {
+      requestData["genres"] = [];
+    }
+
+    if (beat.moods.isNotEmpty) {
+      requestData["moods"] = beat.moods.map((e) => {"id": e.id}).toList();
+    } else {
+      requestData["moods"] = [];
+    }
+
+    // if (beat.key.name != "") {
+    //   requestData["keynoteId"] = beat.key.id;
+    // }
+
+    if (beat.bpm != 0) {
+      requestData["bpm"] = beat.bpm;
+    }
+
+    log(requestData.toString());
+
+    try {
+      final response = await dio.patch(
+        "http://192.168.0.135:7772/api/unpbeats/saveDraft",
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
+        data: requestData,
+      );
+
+      if (response.statusCode == 200) {
+        final currentState = state as BeatEditState;
+
+        log("update beat");
+
+        emit(currentState.copyWith(
+          isSavedSuccess: true,
+        ));
+        // emit(currentState.copyWith(beat: currentState.beat));
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 }
