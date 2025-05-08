@@ -68,10 +68,17 @@ class AnketaRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EditBeatPage]
-class EditBeatRoute extends PageRouteInfo<void> {
-  const EditBeatRoute({List<PageRouteInfo>? children})
-      : super(
+class EditBeatRoute extends PageRouteInfo<EditBeatRouteArgs> {
+  EditBeatRoute({
+    required BeatEntity beat,
+    required bool isEditMode,
+    List<PageRouteInfo>? children,
+  }) : super(
           EditBeatRoute.name,
+          args: EditBeatRouteArgs(
+            beat: beat,
+            isEditMode: isEditMode,
+          ),
           initialChildren: children,
         );
 
@@ -80,9 +87,29 @@ class EditBeatRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const EditBeatPage();
+      final args = data.argsAs<EditBeatRouteArgs>();
+      return EditBeatPage(
+        beat: args.beat,
+        isEditMode: args.isEditMode,
+      );
     },
   );
+}
+
+class EditBeatRouteArgs {
+  const EditBeatRouteArgs({
+    required this.beat,
+    required this.isEditMode,
+  });
+
+  final BeatEntity beat;
+
+  final bool isEditMode;
+
+  @override
+  String toString() {
+    return 'EditBeatRouteArgs{beat: $beat, isEditMode: $isEditMode}';
+  }
 }
 
 /// generated route for
