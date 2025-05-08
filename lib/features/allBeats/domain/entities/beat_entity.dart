@@ -52,7 +52,7 @@ class BeatEntity extends Equatable {
       // key: KeyEntity.fromJson(
       //   json['keynote_id'] as Map<String, dynamic>,
       // ),
-      key: KeyEntity(id: 1, name: "name"),
+      key: const KeyEntity(id: 1, name: "name"),
       status: StatusBeat.values
           .firstWhere((e) => e.toString() == 'StatusBeat.${json['status']}'),
       availableFiles: AvailableFilesEntity.fromJson(

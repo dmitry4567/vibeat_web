@@ -9,8 +9,6 @@ import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
 import 'app/app_router.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'app/injection_container.dart' as di;
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +33,9 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => di.sl<AuthBloc>(),
         ),
-        // BlocProvider(
-        //   create: (context) => di.sl<AnketaBloc>(),
-        // ),
+        BlocProvider(
+          create: (context) => di.sl<AnketaBloc>(),
+        ),
         BlocProvider(
           create: (context) => di.sl<AllBeatBloc>(),
         ),

@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
 import 'package:vibeat_web/core/api/auth_interceptor.dart';
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/core/network/network_info.dart';
@@ -71,7 +70,7 @@ Future<void> init() async {
 
   // Initialize API Client
   final apiClient = sl<ApiClient>();
-  await apiClient.initialize('http://192.168.0.135:8080/');
+  await apiClient.initialize('http://172.20.10.2:8080/');
   // await apiClient.initialize('http://172.20.10.2:8080/');
 
   // Add auth interceptor

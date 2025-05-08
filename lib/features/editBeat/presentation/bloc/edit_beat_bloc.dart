@@ -3,9 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vibeat_web/features/allBeats/data/models/beat_model.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 
 part 'edit_beat_event.dart';
@@ -61,7 +59,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     String v4 = uuid.v1();
 
     final response = await dio.post(
-      "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/mp3beats",
+      "http://172.20.10.2:7774/api/presigned/PresignedPostRequest/mp3beats",
       data: {
         "uuidFileName": v4,
         "file": event.file.name,
@@ -99,7 +97,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       print('File uploaded successfully to Yandex Cloud S3');
 
       final response = await dio.post(
-        "http://192.168.0.135:7774/api/updateURL/beat/mp3",
+        "http://172.20.10.2:7774/api/updateURL/beat/mp3",
         options: Options(headers: {
           'Content-Type': 'application/json',
         }),
@@ -346,7 +344,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
 
         emit(currentState.copyWith(
           beat: currentState.beat
-              .copyWith(urlPicture: "storage.yandexcloud.net/imagesall/" + v4),
+              .copyWith(urlPicture: "storage.yandexcloud.net/imagesall/$v4"),
           isCoverLoading: IsCoverLoading.success,
           progressCover: 1.0,
         ));

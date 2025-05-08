@@ -1,17 +1,13 @@
-import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/custom_functions.dart';
-import 'package:vibeat_web/features/allBeats/data/models/beat_model.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/responsive.dart';
-import 'package:vibeat_web/widgets/primary_button.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/tag_widget.dart';
 
 @RoutePage()

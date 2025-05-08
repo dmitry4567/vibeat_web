@@ -1,14 +1,10 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dropzone/flutter_dropzone.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:vibeat_web/app/injection_container.dart';
-import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/custom_functions.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
@@ -19,8 +15,6 @@ import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_fil
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/edit_cover.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_tags/edit_tags.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/info_beat_widget.dart';
-import 'package:vibeat_web/widgets/license_cart_widget.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/tag_widget.dart';
 import 'package:uuid/uuid.dart';
 
 @RoutePage()
@@ -234,7 +228,7 @@ class _EditBeatPageState extends State<EditBeatPage> {
                                 onPressed: () {
                                   // context.router.popForced();
 
-                                  context.read<EditBeatBloc>().add(SaveDraft());
+                                  context.read<EditBeatBloc>().add(const SaveDraft());
                                 },
                                 color: const Color(0xff1E1E1E),
                                 padding: const EdgeInsets.symmetric(
@@ -328,9 +322,9 @@ class _EditBeatPageState extends State<EditBeatPage> {
                       ),
                     ),
                   ),
-                  BasicData(),
-                  EditTags(),
-                  GenreSelector(),
+                  const BasicData(),
+                  const EditTags(),
+                  const GenreSelector(),
                   CoverBeat(beatId: widget.beat.id),
                   // Visibility(
                   //   visible: true,

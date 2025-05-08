@@ -1,8 +1,4 @@
-import 'package:dartz/dartz.dart';
-import 'package:vibeat_web/core/error/exceptions.dart';
-import 'package:vibeat_web/core/error/failures.dart';
 import 'package:vibeat_web/core/network/network_info.dart';
-import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
 

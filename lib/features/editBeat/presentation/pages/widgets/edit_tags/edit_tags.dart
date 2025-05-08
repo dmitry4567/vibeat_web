@@ -1,10 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vibeat_web/features/allBeats/data/models/beat_model.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/tag_widget.dart';
@@ -80,7 +78,7 @@ class _EditTagsState extends State<EditTags> {
                       if (currentState is BeatEditState) {
                         context.read<EditBeatBloc>().add(
                               ChangeTags(
-                                tags: value as List<TagEntity>,
+                                tags: value,
                               ),
                             );
                       }

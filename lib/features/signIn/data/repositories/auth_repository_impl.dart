@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/core/constants/strings.dart';
 import 'package:vibeat_web/features/signIn/domain/entities/user_entity.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 import 'package:dio/dio.dart' as d;

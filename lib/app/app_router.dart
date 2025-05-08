@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vibeat_web/all_license_page.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
