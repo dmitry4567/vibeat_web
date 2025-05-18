@@ -31,6 +31,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
                 isCoverLoading: IsCoverLoading.initial,
                 progressCover: 0,
                 isSavedSuccess: false,
+                isBeatPublish: false,
               )
             : BeatViewState(beat)) {
     on<AddMp3File>(_addMp3File);
@@ -45,6 +46,8 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<ChangeKey>(_changeKey);
     on<ChangeBpm>(_changeBpm);
     on<SaveDraft>(_saveDraft);
+    on<PublishBeat>(_publishBeat);
+    on<PublishBeatSuccess>(_publishBeatSuccess);
   }
 
   Future<void> _addMp3File(AddMp3File event, Emitter<BeatState> emit) async {
@@ -58,70 +61,80 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     var uuid = const Uuid();
     String v4 = uuid.v1();
 
-    final response = await dio.post(
-      "http://172.20.10.2:7774/api/presigned/PresignedPostRequest/mp3beats",
-      data: {
-        "uuidFileName": v4,
-        "file": event.file.name,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      }),
-    );
-
-    final url = response.data['data']['URL'];
-
-    // Загружаем файл на S3
-    final uploadResponse = await dio.put(
-      url,
-      // 'https://cors-anywhere.herokuapp.com/' + url,
-      data: event.file.bytes,
-      options: Options(
-        headers: {
-          // 'Content-Type': 'multipart/form-data',
-          'Content-Type': 'audio/mpeg',
-          'Access-Control-Allow-Origin': '*',
-        },
-      ),
-      onSendProgress: (int sent, int total) {
-        final progress = sent / total;
-        emit(currentState.copyWith(
-          isMp3Loading: IsMp3Loading.loading,
-          progressMp3: progress,
-        ));
-      },
-    );
-
-    if (uploadResponse.statusCode == 200) {
-      print('File uploaded successfully to Yandex Cloud S3');
-
+    try {
       final response = await dio.post(
-        "http://172.20.10.2:7774/api/updateURL/beat/mp3",
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
+        "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/mp3beats",
         data: {
-          "id": event.beatId,
-          "objectKey": v4,
+          "uuidFileName": v4,
+          "file": event.file.name,
+        },
+        options: Options(
+          headers: {
+            'Authorization':
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDU3NTksImlhdCI6MTc0NzU4NjU1OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.tdEediLdlIwe6zujGCxtuJaK-q9Gq50L-uQr2Gh6LMQ',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        ),
+      );
+
+      final url = response.data['data']['URL'];
+
+      // Загружаем файл на S3
+      final uploadResponse = await dio.put(
+        url,
+        // 'https://cors-anywhere.herokuapp.com/' + url,
+        data: event.file.bytes,
+        options: Options(
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            'Content-Type': 'audio/mpeg',
+            'Access-Control-Allow-Origin': '*',
+          },
+        ),
+        onSendProgress: (int sent, int total) {
+          final progress = sent / total;
+          emit(currentState.copyWith(
+            isMp3Loading: IsMp3Loading.loading,
+            progressMp3: progress,
+          ));
         },
       );
 
-      if (response.statusCode == 200) {
-        log("file is added");
+      if (uploadResponse.statusCode == 200) {
+        print('File uploaded successfully to Yandex Cloud S3');
 
-        final currentState = state as BeatEditState;
+        final response = await dio.post(
+          "http://192.168.0.135:7774/api/updateURL/beat/mp3",
+          options: Options(headers: {
+            'Authorization':
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDU3NTksImlhdCI6MTc0NzU4NjU1OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.tdEediLdlIwe6zujGCxtuJaK-q9Gq50L-uQr2Gh6LMQ',
+            'Content-Type': 'application/json',
+          }),
+          data: {
+            "id": event.beatId,
+            "objectKey": v4,
+          },
+        );
 
-        emit(currentState.copyWith(
-          beat: currentState.beat.copyWith(
-            availableFiles: currentState.beat.availableFiles.copyWith(
-              mp3Url: v4,
+        if (response.statusCode == 200) {
+          log("file is added");
+
+          final currentState = state as BeatEditState;
+
+          emit(currentState.copyWith(
+            beat: currentState.beat.copyWith(
+              availableFiles: currentState.beat.availableFiles.copyWith(
+                mp3Url: v4,
+              ),
             ),
-          ),
-          isMp3Loading: IsMp3Loading.success,
-          progressMp3: 1.0,
-        ));
+            isMp3Loading: IsMp3Loading.success,
+            progressMp3: 1.0,
+          ));
+        }
       }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
@@ -392,8 +405,8 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
   Future<void> _changeKey(ChangeKey event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
-    // emit(currentState.copyWith(
-    //     beat: currentState.beat.copyWith(key: event.key)));
+    emit(currentState.copyWith(
+        beat: currentState.beat.copyWith(key: event.key)));
   }
 
   Future<void> _changeBpm(ChangeBpm event, Emitter<BeatState> emit) async {
@@ -442,9 +455,9 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       requestData["moods"] = [];
     }
 
-    // if (beat.key.name != "") {
-    //   requestData["keynoteId"] = beat.key.id;
-    // }
+    if (beat.key.name != "") {
+      requestData["keynoteId"] = beat.key.id;
+    }
 
     if (beat.bpm != 0) {
       requestData["bpm"] = beat.bpm;
@@ -474,5 +487,38 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future<void> _publishBeat(PublishBeat event, Emitter<BeatState> emit) async {
+    final currentState = state as BeatEditState;
+
+    try {
+      final response = await dio.get(
+        "http://192.168.0.135:7772/api/unpbeats/publishBeat/${currentState.beat.id}",
+        options: Options(headers: {
+          'Authorization':
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDQxNzcsImlhdCI6MTc0NzU4NDk3NywiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.yo1vAYEPiu9sZqwc3RJ7laRqRv3T96hnn9uChEpfC5s',
+          'Content-Type': 'application/json',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        log(response.statusMessage.toString());
+        final currentState = state as BeatEditState;
+
+        emit(currentState.copyWith(isBeatPublish: true));
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void _publishBeatSuccess(
+    PublishBeatSuccess event,
+    Emitter<BeatState> emit,
+  ) {
+    final currentState = state as BeatEditState;
+
+    emit(currentState.copyWith(isBeatPublish: false));
   }
 }

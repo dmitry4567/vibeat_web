@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<Tuple2<UserEntity?, bool>> get jwtStream {
     return _googleSignInPlatform.userDataEvents!.asyncMap((event) async {
       final response = await _apiClient.post(
-        'userca/auth/google/getjwt',
+        'user/auth/google/getjwt',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        'userca/login',
+        'user/login',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        'userca/register',
+        'user/register',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -129,47 +129,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // @override
-  // Future<Tuple2<UserEntity?, bool>> signInWithGoogle() async {
-  //   try {
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //     if (googleUser == null) return const Tuple2(null, false);
-
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-
-  //     final response = await _apiClient.post(
-  //       '/auth/google/getjwt',
-  //       options: d.Options(
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       ),
-  //       data: {
-  //         'token': googleAuth.idToken,
-  //       },
-  //     );
-
-  //     if (response.statusCode != 200) return const Tuple2(null, false);
-
-  //     final responseData = response.data;
-
-  //     final user = UserEntity(
-  //       jwtToken: responseData['token'],
-  //       authType: AuthType.google,
-  //     );
-
-  //     await cacheUser(user, AuthType.google);
-
-  //     // Проверяем наличие параметра 'message' в responseData
-  //     final bool hasMessage = responseData.containsKey('new_user');
-
-  //     return Tuple2(user, hasMessage);
-  //   } catch (e) {
-  //     print('Error in signInWithGoogle: $e');
-  //     return const Tuple2(null, false);
-  //   }
-  // }
 
   @override
   Future<void> signOut() async {

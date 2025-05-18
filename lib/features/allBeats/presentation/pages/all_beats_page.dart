@@ -37,7 +37,7 @@ final List<CategoryType> items = [
       index: 1,
       color: const Color(0xffF59E0B),
       value: "На модерации",
-      key: "draft2"),
+      key: "processing"),
   CategoryType(
       index: 3, color: Colors.green, value: "Опубликован", key: "published"),
   CategoryType(index: 4, color: Colors.blue, value: "Продан", key: "draft3"),

@@ -11,19 +11,16 @@ class ApiClient {
   });
 
   Future<void> initialize(String baseUrl) async {
-    // Базовые настройки Dio
     dio.options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
-      // sendTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
     );
 
-    // Добавляем интерцепторы
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         logger.i('Request: ${options.method} ${options.uri}');
@@ -45,7 +42,6 @@ class ApiClient {
       },
     ));
 
-    // Добавляем логгер запросов
     dio.interceptors.add(LogInterceptor(
       request: true,
       requestHeader: true,

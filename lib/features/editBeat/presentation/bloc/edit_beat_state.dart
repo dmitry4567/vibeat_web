@@ -70,6 +70,7 @@ class BeatEditState extends BeatState {
   final double progressCover;
 
   final bool isSavedSuccess;
+  final bool isBeatPublish;
 
   BeatEditState({
     required this.beat,
@@ -82,6 +83,7 @@ class BeatEditState extends BeatState {
     required this.isCoverLoading,
     required this.progressCover,
     required this.isSavedSuccess,
+    required this.isBeatPublish
   });
 
   BeatEditState copyWith({
@@ -95,6 +97,7 @@ class BeatEditState extends BeatState {
     IsCoverLoading? isCoverLoading,
     double? progressCover,
     bool? isSavedSuccess,
+    bool? isBeatPublish,
   }) {
     return BeatEditState(
       beat: beat ?? this.beat,
@@ -107,6 +110,7 @@ class BeatEditState extends BeatState {
       isCoverLoading: isCoverLoading ?? this.isCoverLoading,
       progressCover: progressCover ?? this.progressCover,
       isSavedSuccess: isSavedSuccess ?? this.isSavedSuccess,
+      isBeatPublish: isBeatPublish ?? this.isBeatPublish
     );
   }
 
@@ -122,6 +126,7 @@ class BeatEditState extends BeatState {
         isCoverLoading,
         progressCover,
         isSavedSuccess,
+        isBeatPublish
       ];
 }
 

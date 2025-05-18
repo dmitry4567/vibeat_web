@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +50,7 @@ class _GenreSelectorState extends State<GenreSelector> {
       final state = bloc.state as BeatEditState;
       selectedGenres = List<GenreEntity>.from(state.beat.genres);
       selectedMoods = List<MoodEntity>.from(state.beat.moods);
+      selectedKey = state.beat.key;
       bpm = state.beat.bpm;
       searchController4.text = bpm.toString();
     }
@@ -106,7 +109,7 @@ class _GenreSelectorState extends State<GenreSelector> {
     setState(() {
       selectedKey = key;
       final bloc = context.read<EditBeatBloc>();
-      bloc.add(ChangeKey(key: key.id));
+      bloc.add(ChangeKey(key: key));
     });
   }
 

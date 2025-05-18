@@ -50,9 +50,13 @@ class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
               moods: (e['moods'] as List<dynamic>)
                   .map((mood) => Mood.fromJson(mood))
                   .toList(),
+              // key: KeyModel(
+              //   id: e['ID'] ?? 1,
+              //   name: e['Name'] ?? "name",
+              // ),
               key: KeyModel(
-                id: e['ID'] ?? 1,
-                name: e['Name'] ?? "name",
+                id: e['keynote']['id'],
+                name: e['keynote']['name'],
               ),
               status: StatusBeat.values.firstWhere(
                   (status) => status.toString() == 'StatusBeat.${e['status']}'),

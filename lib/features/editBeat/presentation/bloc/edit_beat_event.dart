@@ -66,7 +66,7 @@ class ChangeMoods extends EditBeatEvent {
 }
 
 class ChangeKey extends EditBeatEvent {
-  final int key;
+  final KeyEntity key;
 
   const ChangeKey({required this.key});
 }
@@ -79,4 +79,12 @@ class ChangeBpm extends EditBeatEvent {
 
 class SaveDraft extends EditBeatEvent {
   const SaveDraft();
+}
+
+class PublishBeat extends EditBeatEvent {
+  const PublishBeat();
+}
+
+class PublishBeatSuccess extends EditBeatEvent {
+  const PublishBeatSuccess();
 }

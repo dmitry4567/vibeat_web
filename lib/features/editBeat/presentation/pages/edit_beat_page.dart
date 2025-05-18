@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/custom_functions.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
@@ -33,6 +34,7 @@ class _EditBeatPageState extends State<EditBeatPage> {
 
   bool isUploading = false;
   bool fileAdded = false;
+
   String nameFile1 = "";
   double progress = 0;
   final bool _switchValue = false;
@@ -183,6 +185,16 @@ class _EditBeatPageState extends State<EditBeatPage> {
               setupSnackBar("Beat saved"),
             );
           }
+
+          if (state is BeatEditState && state.isBeatPublish == true) {
+            context.read<EditBeatBloc>().add(const PublishBeatSuccess());
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              setupSnackBar("Beat on moderation"),
+            );
+
+            context.router.push(const AllBeatsRoute());
+          }
         },
         child: Builder(
           builder: (context) => Scaffold(
@@ -195,19 +207,19 @@ class _EditBeatPageState extends State<EditBeatPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Студия / Редактирование бита    ${widget.beat.id}   editMode: ${widget.isEditMode.toString()}",
-                            style: const TextStyle(
+                            "Студия / Редактирование бита",
+                            style: TextStyle(
                               fontSize: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
                               fontFamily: "Helvetica",
                             ),
                           ),
-                          const Text(
+                          Text(
                             "Редактирование бита",
                             style: TextStyle(
                               fontSize: 32,
@@ -228,7 +240,9 @@ class _EditBeatPageState extends State<EditBeatPage> {
                                 onPressed: () {
                                   // context.router.popForced();
 
-                                  context.read<EditBeatBloc>().add(const SaveDraft());
+                                  context
+                                      .read<EditBeatBloc>()
+                                      .add(const SaveDraft());
                                 },
                                 color: const Color(0xff1E1E1E),
                                 padding: const EdgeInsets.symmetric(
@@ -250,7 +264,11 @@ class _EditBeatPageState extends State<EditBeatPage> {
                               const SizedBox(width: 20),
                               MaterialButton(
                                 height: 44,
-                                onPressed: () {},
+                                onPressed: () {
+                                  context
+                                      .read<EditBeatBloc>()
+                                      .add(const PublishBeat());
+                                },
                                 color: const Color(0xff8D40FF),
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 22,

@@ -155,8 +155,8 @@ class KeyModel {
 
   static KeyModel fromJson(Map<String, dynamic> json) {
     return KeyModel(
-      id: json['ID'] as int,
-      name: json['Name'] as String,
+      id: json['id'] as int,
+      name: json['name'] as String,
     );
   }
 }
@@ -189,4 +189,4 @@ class Instrument {
   }
 }
 
-enum StatusBeat { draft, published }
+enum StatusBeat { draft, processing }

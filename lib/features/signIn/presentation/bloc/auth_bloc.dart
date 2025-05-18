@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tuple/tuple.dart';
@@ -15,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleJwtStream>(_onGoogleJwtStream);
     on<SignInEmailPasswordRequested>(_onEmailPasswordRequested);
     on<SignUpEmailPasswordRequested>(_onSignUpEmailPasswordRequested);
-    // on<GoogleSignInRequested>(_onGoogleSignInRequested);
     on<SignOutRequested>(_onSignOutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
   }
@@ -84,28 +82,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(RegisteredNewUser(user: data.item1!));
     }
   }
-
-  // Future<void> _onGoogleSignInRequested(
-  //   GoogleSignInRequested event,
-  //   Emitter<AuthState> emit,
-  // ) async {
-  //   emit(AuthLoading());
-  //   try {
-  //     Tuple2<UserEntity?, bool> data = await authRepository.signInWithGoogle();
-
-  //     if (data.item2 == true) {
-  //       emit(RegisteredNewUser(user: data.item1!));
-  //     } else if (data.item1 != null) {
-  //       emit(Authenticated(user: data.item1!));
-  //     } else {
-  //       emit(const AuthError(message: "Error"));
-  //       emit(Unauthenticated());
-  //     }
-  //   } catch (_) {
-  //     emit(const AuthError(message: 'Sign in failed'));
-  //     emit(Unauthenticated());
-  //   }
-  // }
 
   Future<void> _onSignOutRequested(
     SignOutRequested event,
