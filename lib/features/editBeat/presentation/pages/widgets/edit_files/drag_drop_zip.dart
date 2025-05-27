@@ -64,7 +64,7 @@ class _DragAndDropZipState extends State<DragAndDropZip> {
                           log(file.name.toString());
 
                           context.read<EditBeatBloc>().add(
-                                AddZipFile(
+                                AddZipFileEvent(
                                   beatId: widget.beatId,
                                   file: file,
                                 ),

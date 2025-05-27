@@ -7,25 +7,25 @@ abstract class EditBeatEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AddMp3File extends EditBeatEvent {
+class AddMp3FileEvent extends EditBeatEvent {
   final String beatId;
   final PlatformFile file;
 
-  const AddMp3File({required this.beatId, required this.file});
+  const AddMp3FileEvent({required this.beatId, required this.file});
 }
 
-class AddWavFile extends EditBeatEvent {
+class AddWavFileEvent extends EditBeatEvent {
   final String beatId;
   final PlatformFile file;
 
-  const AddWavFile({required this.beatId, required this.file});
+  const AddWavFileEvent({required this.beatId, required this.file});
 }
 
-class AddZipFile extends EditBeatEvent {
+class AddZipFileEvent extends EditBeatEvent {
   final String beatId;
   final PlatformFile file;
 
-  const AddZipFile({required this.beatId, required this.file});
+  const AddZipFileEvent({required this.beatId, required this.file});
 }
 
 class AddCoverFile extends EditBeatEvent {

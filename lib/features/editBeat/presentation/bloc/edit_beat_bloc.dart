@@ -5,6 +5,10 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
+
+import '../../domain/usecases/add_mp3.dart';
 
 part 'edit_beat_event.dart';
 part 'edit_beat_state.dart';
@@ -12,11 +16,17 @@ part 'edit_beat_state.dart';
 class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
   // final GetEditBeats getEditBeats;
   // final MakeEmptyBeat makeEmptyBeat;
+  final AddMp3File addMp3File;
+  final AddWavFile addWavFile;
+  final AddZipFile addZipFile;
   Dio dio = Dio();
 
   EditBeatBloc({
     required BeatEntity beat,
     required bool isEditMode,
+    required this.addMp3File,
+    required this.addWavFile,
+    required this.addZipFile,
     // required this.getEditBeats,
     // required this.makeEmptyBeat,
   }) : super(isEditMode
@@ -34,9 +44,9 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
                 isBeatPublish: false,
               )
             : BeatViewState(beat)) {
-    on<AddMp3File>(_addMp3File);
-    on<AddWavFile>(_addWavFile);
-    on<AddZipFile>(_addZipFile);
+    on<AddMp3FileEvent>(_addMp3File);
+    on<AddWavFileEvent>(_addWavFile);
+    on<AddZipFileEvent>(_addZipFile);
     on<AddCoverFile>(_addCoverFile);
     on<ChangeName>(_changeName);
     on<ChangeDescription>(_changeDescription);
@@ -50,7 +60,8 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<PublishBeatSuccess>(_publishBeatSuccess);
   }
 
-  Future<void> _addMp3File(AddMp3File event, Emitter<BeatState> emit) async {
+  Future<void> _addMp3File(
+      AddMp3FileEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(
@@ -61,84 +72,36 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     var uuid = const Uuid();
     String v4 = uuid.v1();
 
-    try {
-      final response = await dio.post(
-        "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/mp3beats",
-        data: {
-          "uuidFileName": v4,
-          "file": event.file.name,
-        },
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDU3NTksImlhdCI6MTc0NzU4NjU1OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.tdEediLdlIwe6zujGCxtuJaK-q9Gq50L-uQr2Gh6LMQ',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
+    final result = await addMp3File.call(
+      event,
+      v4,
+      (progress) {
+        emit(currentState.copyWith(
+          isMp3Loading: IsMp3Loading.loading,
+          progressMp3: progress,
+        ));
+      },
+    );
+
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isMp3Loading: IsMp3Loading.error,
+        progressMp3: 0.0,
+      )),
+      (result) => emit(currentState.copyWith(
+        beat: currentState.beat.copyWith(
+          availableFiles: currentState.beat.availableFiles.copyWith(
+            mp3Url: v4,
+          ),
         ),
-      );
-
-      final url = response.data['data']['URL'];
-
-      // Загружаем файл на S3
-      final uploadResponse = await dio.put(
-        url,
-        // 'https://cors-anywhere.herokuapp.com/' + url,
-        data: event.file.bytes,
-        options: Options(
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            'Content-Type': 'audio/mpeg',
-            'Access-Control-Allow-Origin': '*',
-          },
-        ),
-        onSendProgress: (int sent, int total) {
-          final progress = sent / total;
-          emit(currentState.copyWith(
-            isMp3Loading: IsMp3Loading.loading,
-            progressMp3: progress,
-          ));
-        },
-      );
-
-      if (uploadResponse.statusCode == 200) {
-        print('File uploaded successfully to Yandex Cloud S3');
-
-        final response = await dio.post(
-          "http://192.168.0.135:7774/api/updateURL/beat/mp3",
-          options: Options(headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDU3NTksImlhdCI6MTc0NzU4NjU1OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.tdEediLdlIwe6zujGCxtuJaK-q9Gq50L-uQr2Gh6LMQ',
-            'Content-Type': 'application/json',
-          }),
-          data: {
-            "id": event.beatId,
-            "objectKey": v4,
-          },
-        );
-
-        if (response.statusCode == 200) {
-          log("file is added");
-
-          final currentState = state as BeatEditState;
-
-          emit(currentState.copyWith(
-            beat: currentState.beat.copyWith(
-              availableFiles: currentState.beat.availableFiles.copyWith(
-                mp3Url: v4,
-              ),
-            ),
-            isMp3Loading: IsMp3Loading.success,
-            progressMp3: 1.0,
-          ));
-        }
-      }
-    } catch (e) {
-      log(e.toString());
-    }
+        isMp3Loading: IsMp3Loading.success,
+        progressMp3: 1.0,
+      )),
+    );
   }
 
-  Future<void> _addWavFile(AddWavFile event, Emitter<BeatState> emit) async {
+  Future<void> _addWavFile(
+      AddWavFileEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(
@@ -149,33 +112,10 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     var uuid = const Uuid();
     String v4 = uuid.v1();
 
-    final response = await dio.post(
-      "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/wavbeats",
-      data: {
-        "uuidFileName": v4,
-        "file": event.file.name,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
-
-    final url = response.data['data']['URL'];
-
-    // Загружаем файл на S3
-    final uploadResponse = await dio.put(
-      url,
-      // 'https://cors-anywhere.herokuapp.com/' + url,
-      data: event.file.bytes,
-      options: Options(
-        headers: {
-          // 'Content-Type': 'multipart/form-data',
-          'Content-Type': 'audio/wave',
-          'Access-Control-Allow-Origin': '*',
-        },
-      ),
-      onSendProgress: (int sent, int total) {
-        final progress = sent / total;
+    final result = await addWavFile.call(
+      event,
+      v4,
+      (progress) {
         emit(currentState.copyWith(
           isWavLoading: IsWavLoading.loading,
           progressWav: progress,
@@ -183,39 +123,24 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       },
     );
 
-    if (uploadResponse.statusCode == 200) {
-      print('File uploaded successfully to Yandex Cloud S3');
-
-      final response = await dio.post(
-        "http://192.168.0.135:7774/api/updateURL/beat/wav",
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
-        data: {
-          "id": event.beatId,
-          "objectKey": v4,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        log("file is added");
-
-        final currentState = state as BeatEditState;
-
-        emit(currentState.copyWith(
-          beat: currentState.beat.copyWith(
-            availableFiles: currentState.beat.availableFiles.copyWith(
-              wavUrl: v4,
-            ),
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isWavLoading: IsWavLoading.error,
+        progressWav: 0.0,
+      )),
+      (result) => emit(currentState.copyWith(
+        beat: currentState.beat.copyWith(
+          availableFiles: currentState.beat.availableFiles.copyWith(
+            wavUrl: v4,
           ),
-          isWavLoading: IsWavLoading.success,
-          progressWav: 1.0,
-        ));
-      }
-    }
+        ),
+        isWavLoading: IsWavLoading.success,
+        progressWav: 1.0,
+      )),
+    );
   }
 
-  Future<void> _addZipFile(AddZipFile event, Emitter<BeatState> emit) async {
+  Future<void> _addZipFile(AddZipFileEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(
@@ -226,32 +151,10 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     var uuid = const Uuid();
     String v4 = uuid.v1();
 
-    final response = await dio.post(
-      "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/zipbeats",
-      data: {
-        "uuidFileName": v4,
-        "file": event.file.name,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
-
-    final url = response.data['data']['URL'];
-
-    // Загружаем файл на S3
-    final uploadResponse = await dio.put(
-      url,
-      // 'https://cors-anywhere.herokuapp.com/' + url,
-      data: event.file.bytes,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/zip',
-          'Access-Control-Allow-Origin': '*',
-        },
-      ),
-      onSendProgress: (int sent, int total) {
-        final progress = sent / total;
+    final result = await addZipFile.call(
+      event,
+      v4,
+      (progress) {
         emit(currentState.copyWith(
           isZipLoading: IsZipLoading.loading,
           progressZip: progress,
@@ -259,36 +162,21 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       },
     );
 
-    if (uploadResponse.statusCode == 200) {
-      print('File uploaded successfully to Yandex Cloud S3');
-
-      final response = await dio.post(
-        "http://192.168.0.135:7774/api/updateURL/beat/zip",
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
-        data: {
-          "id": event.beatId,
-          "objectKey": v4,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        log("file is added");
-
-        final currentState = state as BeatEditState;
-
-        emit(currentState.copyWith(
-          beat: currentState.beat.copyWith(
-            availableFiles: currentState.beat.availableFiles.copyWith(
-              zipUrl: v4,
-            ),
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isZipLoading: IsZipLoading.error,
+        progressZip: 0.0,
+      )),
+      (result) => emit(currentState.copyWith(
+        beat: currentState.beat.copyWith(
+          availableFiles: currentState.beat.availableFiles.copyWith(
+            zipUrl: v4,
           ),
-          isZipLoading: IsZipLoading.success,
-          progressZip: 1.0,
-        ));
-      }
-    }
+        ),
+        isZipLoading: IsZipLoading.success,
+        progressZip: 1.0,
+      )),
+    );
   }
 
   Future<void> _addCoverFile(

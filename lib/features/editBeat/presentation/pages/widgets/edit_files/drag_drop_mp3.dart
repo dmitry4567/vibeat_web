@@ -64,7 +64,7 @@ class _DragAndDropMp3State extends State<DragAndDropMp3> {
                           log(file.name.toString());
 
                           context.read<EditBeatBloc>().add(
-                                AddMp3File(
+                                AddMp3FileEvent(
                                   beatId: widget.beatId,
                                   file: file,
                                 ),

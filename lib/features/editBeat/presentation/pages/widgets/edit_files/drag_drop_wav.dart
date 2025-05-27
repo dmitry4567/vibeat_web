@@ -64,7 +64,7 @@ class _DragAndDropWavState extends State<DragAndDropWav> {
                           log(file.name.toString());
 
                           context.read<EditBeatBloc>().add(
-                                AddWavFile(
+                                AddWavFileEvent(
                                   beatId: widget.beatId,
                                   file: file,
                                 ),

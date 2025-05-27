@@ -62,8 +62,18 @@ class ApiClient {
     return dio.post(path, data: data);
   }
 
-  Future<Response> put(String path, {dynamic data}) async {
-    return dio.put(path, data: data);
+  Future<Response> put(
+    String path,
+    Options options, {
+    dynamic data,
+    ProgressCallback? onSendProgress,
+  }) async {
+    return dio.put(
+      path,
+      data: data,
+      options: options,
+      onSendProgress: onSendProgress,
+    );
   }
 
   Future<Response> patch(String path, {dynamic data}) async {

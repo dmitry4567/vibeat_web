@@ -22,6 +22,9 @@ import 'package:vibeat_web/features/anketa/presentation/bloc/anketa_bloc.dart';
 import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
 import 'package:vibeat_web/features/editBeat/data/repositories/edit_beat_repository_impl.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_mp3.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
@@ -91,6 +94,9 @@ Future<void> init() async {
     (beat, isEditMode) => EditBeatBloc(
       beat: beat,
       isEditMode: isEditMode,
+      addMp3File: sl(),
+      addWavFile: sl(),
+      addZipFile: sl(),
     ),
   );
 
@@ -129,6 +135,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAllBeats(sl()));
   sl.registerLazySingleton(() => MakeEmptyBeat(sl()));
   sl.registerLazySingleton(() => DeleteBeat(sl()));
+  sl.registerLazySingleton(() => AddMp3File(sl()));
+  sl.registerLazySingleton(() => AddWavFile(sl()));
+  sl.registerLazySingleton(() => AddZipFile(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(

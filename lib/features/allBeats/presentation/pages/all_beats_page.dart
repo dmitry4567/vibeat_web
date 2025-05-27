@@ -1,10 +1,10 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/custom_functions.dart';
+import 'package:vibeat_web/features/allBeats/data/models/beat_model.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/responsive.dart';
@@ -644,38 +644,41 @@ class DynamicHeightContainer extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.router.push(
-                              EditBeatRoute(beat: beat, isEditMode: true));
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(const Color(0xff1e1e1e)),
-                          overlayColor: WidgetStateProperty.all(Colors.white10),
-                          minimumSize:
-                              WidgetStateProperty.all(const Size(34, 34)),
-                          fixedSize:
-                              WidgetStateProperty.all(const Size(34, 34)),
-                          padding: WidgetStateProperty.all(
-                            EdgeInsets.zero,
-                          ),
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          "Редактировать",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Helvetica",
-                          ),
-                        ),
-                      ),
+                      child: beat.status == StatusBeat.draft
+                          ? ElevatedButton(
+                              onPressed: () {
+                                context.router.push(EditBeatRoute(
+                                    beat: beat, isEditMode: true));
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStateProperty.all(
+                                    const Color(0xff1e1e1e)),
+                                overlayColor:
+                                    WidgetStateProperty.all(Colors.white10),
+                                minimumSize:
+                                    WidgetStateProperty.all(const Size(34, 34)),
+                                fixedSize:
+                                    WidgetStateProperty.all(const Size(34, 34)),
+                                padding: WidgetStateProperty.all(
+                                  EdgeInsets.zero,
+                                ),
+                                shape: WidgetStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                              child: const Text(
+                                "Редактировать",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Helvetica",
+                                ),
+                              ),
+                            )
+                          : Container(),
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
