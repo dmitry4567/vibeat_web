@@ -39,7 +39,7 @@ class TagCard extends StatelessWidget {
           delete != null
               ? InkWell(
                   onTap: () {
-                    print("dell");
+                    delete!();
                   },
                   child: SizedBox(
                     width: 20,

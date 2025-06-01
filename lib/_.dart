@@ -9,10 +9,8 @@ import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/widgets/primary_button.dart';
 import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:google_sign_in_web/web_only.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
-import 'package:vibeat_web/main.dart';
 
 final storage = FlutterSecureStorageWeb();
 
