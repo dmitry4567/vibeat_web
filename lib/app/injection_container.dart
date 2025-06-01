@@ -22,6 +22,7 @@ import 'package:vibeat_web/features/anketa/presentation/bloc/anketa_bloc.dart';
 import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
 import 'package:vibeat_web/features/editBeat/data/repositories/edit_beat_repository_impl.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_mp3.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
@@ -97,6 +98,7 @@ Future<void> init() async {
       addMp3File: sl(),
       addWavFile: sl(),
       addZipFile: sl(),
+      addCoverFile: sl(),
     ),
   );
 
@@ -138,6 +140,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddMp3File(sl()));
   sl.registerLazySingleton(() => AddWavFile(sl()));
   sl.registerLazySingleton(() => AddZipFile(sl()));
+  sl.registerLazySingleton(() => AddCoverFile(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(

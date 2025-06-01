@@ -81,4 +81,26 @@ class EditBeatRepositoryImpl implements EditBeatRepository {
       return Left(ServerFailure('No Internet Connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> addCoverFile(
+    AddCoverFileEvent event,
+    String v4,
+    void Function(double progress)? onProgress,
+  ) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.addCoverFile(
+          event,
+          v4,
+          onProgress: onProgress,
+        );
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      }
+    } else {
+      return Left(ServerFailure('No Internet Connection'));
+    }
+  }
 }

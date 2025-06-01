@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 
@@ -19,6 +20,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
   final AddMp3File addMp3File;
   final AddWavFile addWavFile;
   final AddZipFile addZipFile;
+  final AddCoverFile addCoverFile;
   Dio dio = Dio();
 
   EditBeatBloc({
@@ -27,6 +29,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     required this.addMp3File,
     required this.addWavFile,
     required this.addZipFile,
+    required this.addCoverFile,
     // required this.getEditBeats,
     // required this.makeEmptyBeat,
   }) : super(isEditMode
@@ -47,7 +50,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<AddMp3FileEvent>(_addMp3File);
     on<AddWavFileEvent>(_addWavFile);
     on<AddZipFileEvent>(_addZipFile);
-    on<AddCoverFile>(_addCoverFile);
+    on<AddCoverFileEvent>(_addCoverFile);
     on<ChangeName>(_changeName);
     on<ChangeDescription>(_changeDescription);
     on<ChangeTags>(_changeTags);
@@ -140,7 +143,8 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     );
   }
 
-  Future<void> _addZipFile(AddZipFileEvent event, Emitter<BeatState> emit) async {
+  Future<void> _addZipFile(
+      AddZipFileEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(
@@ -180,7 +184,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
   }
 
   Future<void> _addCoverFile(
-      AddCoverFile event, Emitter<BeatState> emit) async {
+      AddCoverFileEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(
@@ -191,32 +195,10 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     var uuid = const Uuid();
     String v4 = uuid.v1();
 
-    final response = await dio.post(
-      "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/imagesall",
-      data: {
-        "uuidFileName": v4,
-        "file": event.file.name,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
-
-    final url = response.data['data']['URL'];
-
-    // Загружаем файл на S3
-    final uploadResponse = await dio.put(
-      url,
-      // 'https://cors-anywhere.herokuapp.com/' + url,
-      data: event.file.bytes,
-      options: Options(
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Access-Control-Allow-Origin': '*',
-        },
-      ),
-      onSendProgress: (int sent, int total) {
-        final progress = sent / total;
+    final result = await addCoverFile.call(
+      event,
+      v4,
+      (progress) {
         emit(currentState.copyWith(
           isCoverLoading: IsCoverLoading.loading,
           progressCover: progress,
@@ -224,33 +206,18 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       },
     );
 
-    if (uploadResponse.statusCode == 200) {
-      print('File uploaded successfully to Yandex Cloud S3');
-
-      final response = await dio.post(
-        "http://192.168.0.135:7774/api/updateURL/beat/cover",
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
-        data: {
-          "id": event.beatId,
-          "objectKey": v4,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        log("file is added");
-
-        final currentState = state as BeatEditState;
-
-        emit(currentState.copyWith(
-          beat: currentState.beat
-              .copyWith(urlPicture: "storage.yandexcloud.net/imagesall/$v4"),
-          isCoverLoading: IsCoverLoading.success,
-          progressCover: 1.0,
-        ));
-      }
-    }
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isCoverLoading: IsCoverLoading.error,
+        progressCover: 0.0,
+      )),
+      (result) => emit(currentState.copyWith(
+        beat: currentState.beat
+            .copyWith(urlPicture: "storage.yandexcloud.net/imagesall/$v4"),
+        isCoverLoading: IsCoverLoading.success,
+        progressCover: 1.0,
+      )),
+    );
   }
 
   Future<void> _changeName(ChangeName event, Emitter<BeatState> emit) async {

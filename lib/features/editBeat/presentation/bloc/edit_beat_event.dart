@@ -28,11 +28,11 @@ class AddZipFileEvent extends EditBeatEvent {
   const AddZipFileEvent({required this.beatId, required this.file});
 }
 
-class AddCoverFile extends EditBeatEvent {
+class AddCoverFileEvent extends EditBeatEvent {
   final String beatId;
   final PlatformFile file;
 
-  const AddCoverFile({required this.beatId, required this.file});
+  const AddCoverFileEvent({required this.beatId, required this.file});
 }
 
 class ChangeName extends EditBeatEvent {

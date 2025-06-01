@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,8 @@ class _CoverBeatState extends State<CoverBeat> {
                               height: 44,
                               onPressed: () async {
                                 FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles();
+                                    await FilePicker.platform.pickFiles(
+                                        allowedExtensions: ['jpg', 'png']);
 
                                 if (result != null) {
                                   final file = result.files.first;
@@ -112,7 +114,7 @@ class _CoverBeatState extends State<CoverBeat> {
                                   log(file.name.toString());
 
                                   context.read<EditBeatBloc>().add(
-                                        AddCoverFile(
+                                        AddCoverFileEvent(
                                           beatId: widget.beatId,
                                           file: file,
                                         ),
@@ -129,20 +131,28 @@ class _CoverBeatState extends State<CoverBeat> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                  SizedBox(
-                                    width: 4,
+                                  Row(
+                                    children: [
+                                      state.beat.urlPicture == ""
+                                          ? const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 18,
+                                            )
+                                          : const SizedBox(),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                    ],
                                   ),
                                   Text(
-                                    "Добавить обложку",
-                                    style: TextStyle(
+                                    state.beat.urlPicture == ""
+                                        ? "Добавить обложку"
+                                        : "Изменить обложку",
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.white,
                                       fontFamily: "OpenSans",

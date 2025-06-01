@@ -18,4 +18,9 @@ abstract class EditBeatRepository {
     String v4,
     void Function(double progress)? onProgress,
   );
+  Future<Either<Failure, bool>> addCoverFile(
+    AddCoverFileEvent event,
+    String v4,
+    void Function(double progress)? onProgress,
+  );
 }
