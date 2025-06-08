@@ -13,6 +13,11 @@ import 'package:vibeat_web/features/allBeats/domain/usecases/delete_beat.dart';
 import 'package:vibeat_web/features/allBeats/domain/usecases/get_all_beats.dart';
 import 'package:vibeat_web/features/allBeats/domain/usecases/make_empty_beat.dart';
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
+import 'package:vibeat_web/features/allLicenses/data/datasource/all_licenses_remote_data_sourse.dart';
+import 'package:vibeat_web/features/allLicenses/data/repositories/all_licenses_repository_impl.dart';
+import 'package:vibeat_web/features/allLicenses/domain/repositories/all_licenses_repositories.dart';
+import 'package:vibeat_web/features/allLicenses/domain/usecases/get_all_licenses.dart';
+import 'package:vibeat_web/features/allLicenses/presentation/bloc/bloc/all_licenses_bloc.dart';
 import 'package:vibeat_web/features/anketa/data/datasource/anketa_remote_data_sourse.dart';
 import 'package:vibeat_web/features/anketa/data/repositories/anketa_repository_impl.dart';
 import 'package:vibeat_web/features/anketa/domain/repositories/anketa_repositories.dart';
@@ -85,16 +90,22 @@ Future<void> init() async {
   sl<Dio>().interceptors.add(sl<AuthInterceptor>());
 
   // BLoCs
-  sl.registerFactory(() => AuthBloc(authRepository: sl()));
+  sl.registerFactory(
+    () => AuthBloc(
+      authRepository: sl(),
+    ),
+  );
   sl.registerFactory(() => AnketaBloc(
         getAnketa: sl(),
         sendAnketaResponse: sl(),
       ));
-  sl.registerFactory(() => AllBeatBloc(
-        getAllBeats: sl(),
-        makeEmptyBeat: sl(),
-        deleteBeat: sl()
-      ));
+  sl.registerFactory(
+    () => AllBeatBloc(
+      getAllBeats: sl(),
+      makeEmptyBeat: sl(),
+      deleteBeat: sl(),
+    ),
+  );
   sl.registerFactoryParam<EditBeatBloc, BeatEntity, bool>(
     (beat, isEditMode) => EditBeatBloc(
       beat: beat,
@@ -104,6 +115,11 @@ Future<void> init() async {
       addZipFile: sl(),
       addCoverFile: sl(),
       publishBeat: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => AllLicensesBloc(
+      getAllLicenses: sl(),
     ),
   );
 
@@ -135,6 +151,12 @@ Future<void> init() async {
       remoteDataSource: sl(),
     ),
   );
+  sl.registerLazySingleton<AllLicensesRepository>(
+    () => AllLicensesRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetAnketa(sl()));
@@ -147,6 +169,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddZipFile(sl()));
   sl.registerLazySingleton(() => AddCoverFile(sl()));
   sl.registerLazySingleton(() => PublishBeat(sl()));
+  sl.registerLazySingleton(() => GetAllLicenses(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(
@@ -159,5 +182,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<EditBeatRemoteDataSource>(
     () => EditBeatRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  sl.registerLazySingleton<AllLicensesRemoteDataSource>(
+    () => AllLicensesRemoteDataSourceImpl(apiClient: sl()),
   );
 }
