@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vibeat_web/all_license_page.dart';
+import 'package:vibeat_web/features/allLicenses/presentation/pages/all_license_page.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/main.dart';
 import 'package:vibeat_web/features/anketa/presentation/pages/anketa_web.dart';
