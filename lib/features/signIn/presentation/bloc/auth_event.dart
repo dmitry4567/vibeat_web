@@ -34,7 +34,6 @@ class SignUpEmailPasswordRequested extends AuthEvent {
 }
 
 class GoogleJwtStream extends AuthEvent {}
-// class GoogleSignInRequested extends AuthEvent {}
 
 class SignOutRequested extends AuthEvent {}
 

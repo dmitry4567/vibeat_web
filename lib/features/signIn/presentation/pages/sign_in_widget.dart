@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/custom_functions.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
@@ -22,11 +20,11 @@ class SignInPage2 extends StatefulWidget {
 
 class _SignInPage2State extends State<SignInPage2> {
   // final GoogleSignInPlatform _platform = GetIt.I<GoogleSignInPlatform>();
-  final TextEditingController textController1 = TextEditingController();
-  final TextEditingController textController2 = TextEditingController();
+  final TextEditingController textController1 = TextEditingController(text: "d@gmail.com");
+  final TextEditingController textController2 = TextEditingController(text: "1234");
   bool _isPasswordVisible = false;
 
-  String _message = '';
+  final String _message = '';
   String? _jwtToken;
   Map<String, dynamic>? _userInfo;
 
@@ -137,7 +135,7 @@ class _SignInPage2State extends State<SignInPage2> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                'assets/icons/logo.svg',
+                'icons/logo.svg',
                 width: 125,
                 height: 22,
               ),
@@ -293,10 +291,11 @@ class _SignInPage2State extends State<SignInPage2> {
                         ),
                       ),
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
                         height: 1,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Helvetica',
+                        fontFamily: 'OpenSans',
                       ),
                       keyboardType: TextInputType.text,
                     ),
@@ -377,13 +376,13 @@ class _SignInPage2State extends State<SignInPage2> {
                             // _handleSignIn();
                           },
                           icon: SvgPicture.asset(
-                            'assets/icons/google.svg',
+                            'icons/google.svg',
                           ),
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: SvgPicture.asset(
-                            'assets/icons/yandex.svg',
+                            'icons/yandex.svg',
                           ),
                         ),
                       ],

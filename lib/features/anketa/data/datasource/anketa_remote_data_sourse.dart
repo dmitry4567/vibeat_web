@@ -19,7 +19,7 @@ class AnketaRemoteDataSourceImpl implements AnketaRemoteDataSource {
   Future<List<AnketaModel>> getAnketa() async {
     try {
       final data = await _apiClient.get(
-        '/allGenres',
+        'user/allGenres',
         options: d.Options(),
       );
 
@@ -50,7 +50,7 @@ class AnketaRemoteDataSourceImpl implements AnketaRemoteDataSource {
   @override
   Future<String> sendAnketaResponse(String genres) async {
     final data = await _apiClient.post(
-      '/saveAnketa',
+      'user/saveAnketa',
       options: d.Options(),
       data: {
         'genres': genres,

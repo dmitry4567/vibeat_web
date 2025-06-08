@@ -1,7 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:google_sign_in_web/google_sign_in_web.dart';
-import 'package:google_sign_in_web/web_only.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthInterceptor extends Interceptor {

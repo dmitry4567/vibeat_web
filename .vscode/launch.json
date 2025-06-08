@@ -8,6 +8,8 @@
             "name": "vibeat_web",
             "request": "launch",
             "args": [
+                "--debug",
+                "--web-renderer html",
                 "--web-browser-flag",
                 "--disable-web-security",
                 "--web-hostname=localhost",
@@ -29,5 +31,7 @@
         }
     ]
 }
-
+// flutter build web --release --web-renderer=html
+// cd build/web                                                                                                                                  ✔ 
+// python -m http.server 7357
 // flutter run -d chrome --web-hostname localhost --web-port 7357

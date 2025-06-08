@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/core/constants/strings.dart';
 import 'package:vibeat_web/features/signIn/domain/entities/user_entity.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 import 'package:dio/dio.dart' as d;
@@ -30,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<Tuple2<UserEntity?, bool>> get jwtStream {
     return _googleSignInPlatform.userDataEvents!.asyncMap((event) async {
       final response = await _apiClient.post(
-        '/auth/google/getjwt',
+        'user/auth/google/getjwt',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -66,7 +62,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        '/login',
+        'user/login',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -103,7 +99,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final response = await _apiClient.post(
-        '/register',
+        'user/register',
         options: d.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -133,47 +129,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // @override
-  // Future<Tuple2<UserEntity?, bool>> signInWithGoogle() async {
-  //   try {
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //     if (googleUser == null) return const Tuple2(null, false);
-
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-
-  //     final response = await _apiClient.post(
-  //       '/auth/google/getjwt',
-  //       options: d.Options(
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       ),
-  //       data: {
-  //         'token': googleAuth.idToken,
-  //       },
-  //     );
-
-  //     if (response.statusCode != 200) return const Tuple2(null, false);
-
-  //     final responseData = response.data;
-
-  //     final user = UserEntity(
-  //       jwtToken: responseData['token'],
-  //       authType: AuthType.google,
-  //     );
-
-  //     await cacheUser(user, AuthType.google);
-
-  //     // Проверяем наличие параметра 'message' в responseData
-  //     final bool hasMessage = responseData.containsKey('new_user');
-
-  //     return Tuple2(user, hasMessage);
-  //   } catch (e) {
-  //     print('Error in signInWithGoogle: $e');
-  //     return const Tuple2(null, false);
-  //   }
-  // }
 
   @override
   Future<void> signOut() async {
