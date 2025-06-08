@@ -13,8 +13,8 @@ class ApiClient {
   Future<void> initialize(String baseUrl) async {
     dio.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -23,21 +23,21 @@ class ApiClient {
 
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        logger.i('Request: ${options.method} ${options.uri}');
-        logger.v('Request data: ${options.data}');
-        logger.v('Request headers: ${options.headers}');
+        // logger.i('Request: ${options.method} ${options.uri}');
+        // logger.v('Request data: ${options.data}');
+        // logger.v('Request headers: ${options.headers}');
         return handler.next(options);
       },
       onResponse: (response, handler) {
-        logger.i(
-            'Response: ${response.statusCode} ${response.requestOptions.uri}');
-        logger.v('Response data: ${response.data}');
+        // logger.i(
+        //     'Response: ${response.statusCode} ${response.requestOptions.uri}');
+        // logger.v('Response data: ${response.data}');
         return handler.next(response);
       },
       onError: (DioException error, handler) {
-        logger.e('Error: ${error.type} ${error.requestOptions.uri}');
-        logger.e('Error message: ${error.message}');
-        logger.e('Error response: ${error.response?.data}');
+        // logger.e('Error: ${error.type} ${error.requestOptions.uri}');
+        // logger.e('Error message: ${error.message}');
+        // logger.e('Error response: ${error.response?.data}');
         return handler.next(error);
       },
     ));

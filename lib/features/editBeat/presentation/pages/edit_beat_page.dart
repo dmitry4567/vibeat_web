@@ -265,9 +265,11 @@ class _EditBeatPageState extends State<EditBeatPage> {
                               MaterialButton(
                                 height: 44,
                                 onPressed: () {
-                                  context
-                                      .read<EditBeatBloc>()
-                                      .add(const PublishBeat());
+                                  context.read<EditBeatBloc>().add(
+                                        PublishBeatEvent(
+                                          beatId: widget.beat.id,
+                                        ),
+                                      );
                                 },
                                 color: const Color(0xff8D40FF),
                                 padding: const EdgeInsets.symmetric(

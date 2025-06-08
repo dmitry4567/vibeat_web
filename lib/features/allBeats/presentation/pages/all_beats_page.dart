@@ -544,8 +544,8 @@ class DynamicHeightContainer extends StatelessWidget {
                     BoxDecoration(borderRadius: BorderRadius.circular(8)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    "http://${beat.urlPicture}",
+                  child: Image.network( 
+                    beat.urlPicture != "" ? "http://storage.yandexcloud.net/imagesall/${beat.urlPicture}" : "",
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Center(

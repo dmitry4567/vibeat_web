@@ -113,8 +113,8 @@ class Tag {
 
   static Tag fromJson(Map<String, dynamic> json) {
     return Tag(
-      id: json['ID'] as int,
-      name: json['Name'] as String,
+      id: json['id'] as int,
+      name: (json['Name'] ?? json['name']) as String,
     );
   }
 }
@@ -141,8 +141,8 @@ class Mood {
 
   static Mood fromJson(Map<String, dynamic> json) {
     return Mood(
-      id: json['ID'] as int,
-      name: json['Name'] as String,
+      id: json['id'] as int,
+      name: json['name'] as String,
     );
   }
 }
@@ -189,4 +189,4 @@ class Instrument {
   }
 }
 
-enum StatusBeat { draft, processing }
+enum StatusBeat { draft, published }

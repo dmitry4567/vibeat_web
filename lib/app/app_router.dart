@@ -37,11 +37,11 @@ class AppRouter extends RootStackRouter {
             CustomRoute(
               path: 'allBeats',
               page: AllBeatsRoute.page,
-              initial: true,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),
             CustomRoute(
               path: 'allLicense',
+              initial: true,
               page: AllLicenseRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),

@@ -77,7 +77,9 @@ class _CoverBeatState extends State<CoverBeat> {
                                 width: 200,
                                 height: 200,
                                 child: Image.network(
-                                  "http://${state.beat.urlPicture}",
+                                  state.beat.urlPicture != ""
+                                      ? "http://storage.yandexcloud.net/imagesall/${state.beat.urlPicture}"
+                                      : "",
                                   errorBuilder: (BuildContext context,
                                       Object exception,
                                       StackTrace? stackTrace) {
@@ -105,8 +107,7 @@ class _CoverBeatState extends State<CoverBeat> {
                               height: 44,
                               onPressed: () async {
                                 FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles(
-                                        allowedExtensions: ['jpg', 'png']);
+                                    await FilePicker.platform.pickFiles();
 
                                 if (result != null) {
                                   final file = result.files.first;

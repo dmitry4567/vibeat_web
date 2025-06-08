@@ -4,10 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
 
 import '../../domain/usecases/add_mp3.dart';
 
@@ -21,6 +23,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
   final AddWavFile addWavFile;
   final AddZipFile addZipFile;
   final AddCoverFile addCoverFile;
+  final PublishBeat publishBeat;
   Dio dio = Dio();
 
   EditBeatBloc({
@@ -30,6 +33,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     required this.addWavFile,
     required this.addZipFile,
     required this.addCoverFile,
+    required this.publishBeat,
     // required this.getEditBeats,
     // required this.makeEmptyBeat,
   }) : super(isEditMode
@@ -59,7 +63,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<ChangeKey>(_changeKey);
     on<ChangeBpm>(_changeBpm);
     on<SaveDraft>(_saveDraft);
-    on<PublishBeat>(_publishBeat);
+    on<PublishBeatEvent>(_publishBeat);
     on<PublishBeatSuccess>(_publishBeatSuccess);
   }
 
@@ -212,8 +216,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
         progressCover: 0.0,
       )),
       (result) => emit(currentState.copyWith(
-        beat: currentState.beat
-            .copyWith(urlPicture: "storage.yandexcloud.net/imagesall/$v4"),
+        beat: currentState.beat.copyWith(urlPicture: v4),
         isCoverLoading: IsCoverLoading.success,
         progressCover: 1.0,
       )),
@@ -280,9 +283,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
 
     final beat = currentState.beat;
 
-    final Map<String, dynamic> requestData = {
-      "id": beat.id,
-    };
+    final Map<String, dynamic> requestData = {"id": beat.id, "status": "draft"};
 
     if (beat.name != "") {
       requestData["name"] = beat.name;
@@ -322,7 +323,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
 
     try {
       final response = await dio.patch(
-        "http://192.168.0.135:7772/api/unpbeats/saveDraft",
+        "http://$url:7772/api/unpbeats/saveDraft",
         options: Options(headers: {
           'Content-Type': 'application/json',
         }),
@@ -344,28 +345,20 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     }
   }
 
-  Future<void> _publishBeat(PublishBeat event, Emitter<BeatState> emit) async {
+  Future<void> _publishBeat(
+      PublishBeatEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
-    try {
-      final response = await dio.get(
-        "http://192.168.0.135:7772/api/unpbeats/publishBeat/${currentState.beat.id}",
-        options: Options(headers: {
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc4NDQxNzcsImlhdCI6MTc0NzU4NDk3NywiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyfQ.yo1vAYEPiu9sZqwc3RJ7laRqRv3T96hnn9uChEpfC5s',
-          'Content-Type': 'application/json',
-        }),
-      );
+    final result = await publishBeat.call(event);
 
-      if (response.statusCode == 200) {
-        log(response.statusMessage.toString());
-        final currentState = state as BeatEditState;
-
-        emit(currentState.copyWith(isBeatPublish: true));
-      }
-    } catch (e) {
-      log(e.toString());
-    }
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isBeatPublish: false,
+      )),
+      (result) => emit(currentState.copyWith(
+        isBeatPublish: true,
+      )),
+    );
   }
 
   void _publishBeatSuccess(

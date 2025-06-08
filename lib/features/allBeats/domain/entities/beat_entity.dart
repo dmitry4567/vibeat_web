@@ -57,7 +57,7 @@ class BeatEntity extends Equatable {
       status: StatusBeat.values
           .firstWhere((e) => e.toString() == 'StatusBeat.${json['status']}'),
       availableFiles: AvailableFilesEntity.fromJson(
-        json['AvailableFiles'] as Map<String, dynamic>,
+        json['availableFiles'] as Map<String, dynamic>,
       ),
       bpm: json['bpm'] as int,
       createdAt: json['created_at'] as int,
@@ -125,10 +125,10 @@ class AvailableFilesEntity extends Equatable {
 
   static AvailableFilesEntity fromJson(Map<String, dynamic> json) {
     return AvailableFilesEntity(
-      id: json['ID'] as String,
-      mp3Url: json['MP3Url'] as String,
-      wavUrl: json['WAVUrl'] as String,
-      zipUrl: json['ZIPUrl'] as String,
+      id: json['id'] as String,
+      mp3Url: json['mp3url'] as String,
+      wavUrl: json['wavurl'] as String,
+      zipUrl: json['zipurl'] as String,
     );
   }
 
@@ -163,7 +163,7 @@ class TagEntity {
 
   static TagEntity fromJson(Map<String, dynamic> json) {
     return TagEntity(
-      id: json['ID'] as int,
+      id: json['id'] as int,
       name: json['Name'] as String,
     );
   }
@@ -191,8 +191,8 @@ class MoodEntity {
 
   static MoodEntity fromJson(Map<String, dynamic> json) {
     return MoodEntity(
-      id: json['ID'] as int,
-      name: json['Name'] as String,
+      id: json['id'] as int,
+      name: json['name'] as String,
     );
   }
 }

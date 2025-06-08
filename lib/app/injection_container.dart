@@ -26,6 +26,7 @@ import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_mp3.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
@@ -33,6 +34,9 @@ import '../features/signIn/data/repositories/auth_repository_impl.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 final sl = GetIt.instance;
+
+// const url = "158.160.27.143";
+const url = "192.168.0.135";
 
 Future<void> init() async {
   // External
@@ -74,8 +78,8 @@ Future<void> init() async {
 
   // Initialize API Client
   final apiClient = sl<ApiClient>();
-  await apiClient.initialize('http://192.168.0.135:8080/');
-  // await apiClient.initialize('http://172.20.10.2:8080/');
+  // await apiClient.initialize('http://192.168.0.135:8080/');
+  await apiClient.initialize('http://$url:8080/');
 
   // Add auth interceptor
   sl<Dio>().interceptors.add(sl<AuthInterceptor>());
@@ -99,6 +103,7 @@ Future<void> init() async {
       addWavFile: sl(),
       addZipFile: sl(),
       addCoverFile: sl(),
+      publishBeat: sl(),
     ),
   );
 
@@ -141,6 +146,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddWavFile(sl()));
   sl.registerLazySingleton(() => AddZipFile(sl()));
   sl.registerLazySingleton(() => AddCoverFile(sl()));
+  sl.registerLazySingleton(() => PublishBeat(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(

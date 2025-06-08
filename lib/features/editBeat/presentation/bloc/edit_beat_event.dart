@@ -81,8 +81,10 @@ class SaveDraft extends EditBeatEvent {
   const SaveDraft();
 }
 
-class PublishBeat extends EditBeatEvent {
-  const PublishBeat();
+class PublishBeatEvent extends EditBeatEvent {
+  final String beatId;
+
+  const PublishBeatEvent({required this.beatId});
 }
 
 class PublishBeatSuccess extends EditBeatEvent {

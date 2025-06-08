@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:vibeat_web/core/error/exceptions.dart';
 import 'package:vibeat_web/core/error/failures.dart';
@@ -95,6 +97,20 @@ class EditBeatRepositoryImpl implements EditBeatRepository {
           v4,
           onProgress: onProgress,
         );
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      }
+    } else {
+      return Left(ServerFailure('No Internet Connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> publishBeat(PublishBeatEvent event) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.publishBeat(event);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));

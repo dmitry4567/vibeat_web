@@ -24,6 +24,7 @@ abstract class EditBeatRemoteDataSource {
     String v4, {
     void Function(double progress)? onProgress,
   });
+  Future<bool> publishBeat(PublishBeatEvent event);
 }
 
 class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
@@ -56,7 +57,7 @@ class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
         d.Options(
           headers: {
             // 'Content-Type': 'multipart/form-data',
-            'Content-Type': 'au_apiClient/mpeg',
+            'Content-Type': 'audio/mpeg',
             'Access-Control-Allow-Origin': '*',
           },
         ),
@@ -266,6 +267,27 @@ class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
         if (response.statusCode == 200) {
           return true;
         }
+      }
+      return false;
+    } on d.DioException catch (e) {
+      log('DioException in getAnketa: $e');
+      throw Exception('Failed to load anketa: $e');
+    } on Exception catch (e) {
+      log('Error in getAnketa: $e');
+      throw Exception('Failed to load anketa: $e');
+    }
+  }
+
+  @override
+  Future<bool> publishBeat(PublishBeatEvent event) async {
+    try {
+      final response = await _apiClient.get(
+        "unpbeats/publishBeat/${event.beatId}",
+        options: d.Options(),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
       }
       return false;
     } on d.DioException catch (e) {

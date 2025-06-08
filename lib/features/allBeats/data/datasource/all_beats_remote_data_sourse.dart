@@ -20,62 +20,78 @@ class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
   @override
   Future<List<BeatModel>> getAllBeats() async {
     try {
-      final data = await _apiClient.get(
-        'unpbeats/unpublishedBeatsByBeatmakerJWT',
-        options: d.Options(),
-      );
+      final results = await Future.wait([
+        _apiClient.get(
+          'unpbeats/unpublishedBeatsByBeatmakerJWT',
+          options: d.Options(),
+        ),
+        _apiClient.get(
+          'beat/byBeatmakerByJWT',
+          options: d.Options(),
+        ),
+      ]);
 
-      if (data.statusCode != 200) {
-        throw Exception(
-            'Failed to load anketa. Status code: ${data.statusCode}');
+      for (final response in results) {
+        if (response.statusCode != 200) {
+          throw Exception(
+              'Failed to load data. Status code: ${response.statusCode}');
+        }
+        if (response.data == null || response.data['data'] == null) {
+          throw Exception('Invalid response data format');
+        }
       }
 
-      if (data.data == null || data.data['data'] == null) {
-        throw Exception('Invalid response data format');
+      final data = [
+        ...results[0].data['data'],
+        ...results[1].data['data'],
+      ];
+
+      if (data.isNotEmpty) {
+        final List<BeatModel> beats = data
+            .map(
+              (e) => BeatModel(
+                id: e['id'],
+                name: e['name'],
+                description: e['description'],
+                urlPicture: e['picture'],
+                tags: (e['tags'] as List<dynamic>)
+                    .map((tag) => Tag.fromJson(tag))
+                    .toList(),
+                genres: (e['genres'] as List<dynamic>)
+                    .map((genre) => Genre.fromJson(genre))
+                    .toList(),
+                moods: (e['moods'] as List<dynamic>)
+                    .map((mood) => Mood.fromJson(mood))
+                    .toList(),
+                // key: KeyModel(
+                //   id: e['ID'] ?? 1,
+                //   name: e['Name'] ?? "name",
+                // ),
+                key: KeyModel(
+                  id: e['keynote']['id'],
+                  name: e['keynote']['name'],
+                ),
+                status: StatusBeat.values.firstWhere((status) =>
+                    status.toString() == 'StatusBeat.${e['status']}'),
+                availableFiles: AvailableFiles(
+                  id: e['availableFiles']['id'],
+                  mp3Url: e['availableFiles']['mp3url'],
+                  wavUrl: e['availableFiles']['wavurl'],
+                  zipUrl: e['availableFiles']['zipurl'],
+                ),
+                bpm: e['bpm'],
+                // beatmakerId: e['beatmakerId'],
+                createdAt: e['created_at'],
+              ),
+            )
+            .toList();
+
+        beats.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+        return beats;
+      } else {
+        return [];
       }
-
-      final List<BeatModel> beats = (data.data['data'] as List)
-          .map(
-            (e) => BeatModel(
-              id: e['id'],
-              name: e['name'],
-              description: e['description'],
-              urlPicture: e['picture'],
-              tags: (e['tags'] as List<dynamic>)
-                  .map((tag) => Tag.fromJson(tag))
-                  .toList(),
-              genres: (e['genres'] as List<dynamic>)
-                  .map((genre) => Genre.fromJson(genre))
-                  .toList(),
-              moods: (e['moods'] as List<dynamic>)
-                  .map((mood) => Mood.fromJson(mood))
-                  .toList(),
-              // key: KeyModel(
-              //   id: e['ID'] ?? 1,
-              //   name: e['Name'] ?? "name",
-              // ),
-              key: KeyModel(
-                id: e['keynote']['id'],
-                name: e['keynote']['name'],
-              ),
-              status: StatusBeat.values.firstWhere(
-                  (status) => status.toString() == 'StatusBeat.${e['status']}'),
-              availableFiles: AvailableFiles(
-                id: e['AvailableFiles']['ID'],
-                mp3Url: e['AvailableFiles']['MP3Url'],
-                wavUrl: e['AvailableFiles']['WAVUrl'],
-                zipUrl: e['AvailableFiles']['ZIPUrl'],
-              ),
-              bpm: e['bpm'],
-              // beatmakerId: e['beatmakerId'],
-              createdAt: e['created_at'],
-            ),
-          )
-          .toList();
-
-      beats.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-      return beats;
     } on d.DioException catch (e) {
       log('DioException in getAnketa: $e');
       throw Exception('Failed to load anketa: $e');
