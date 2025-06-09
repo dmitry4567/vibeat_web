@@ -8,6 +8,7 @@ import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/custom_functions.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
+import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/basic_data.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/drag_drop_mp3.dart';
@@ -17,6 +18,7 @@ import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_fil
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_tags/edit_tags.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/info_beat_widget.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
 
 @RoutePage()
 class EditBeatPage extends StatefulWidget {
@@ -346,51 +348,38 @@ class _EditBeatPageState extends State<EditBeatPage> {
                   const EditTags(),
                   const GenreSelector(),
                   CoverBeat(beatId: widget.beat.id),
-                  // Visibility(
-                  //   visible: true,
-                  //   child: Container(
-                  //     margin: const EdgeInsets.only(top: 8),
-                  //     padding: const EdgeInsets.symmetric(
-                  //       horizontal: 33,
-                  //       vertical: 28,
-                  //     ),
-                  //     decoration: const BoxDecoration(
-                  //       color: Color(0xff151515),
-                  //       borderRadius: BorderRadius.all(
-                  //         Radius.circular(12),
-                  //       ),
-                  //     ),
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         const Text(
-                  //           "Добавить лицензии",
-                  //           style: TextStyle(
-                  //             fontSize: 18,
-                  //             color: Colors.white,
-                  //             fontWeight: FontWeight.w400,
-                  //             fontFamily: "OpenSans",
-                  //           ),
-                  //         ),
-                  //         const SizedBox(height: 52),
-                  //         Wrap(
-                  //           spacing: 36.0,
-                  //           runSpacing: 20.0,
-                  //           children: List.generate(4, (index) {
-                  //             return ConstrainedBox(
-                  //               constraints: BoxConstraints(
-                  //                   maxWidth: (MediaQuery.of(context).size.width -
-                  //                           200 -
-                  //                           178) /
-                  //                       2),
-                  //               child: const LicenseWidget(),
-                  //             );
-                  //           }),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+                  Visibility(
+                    visible: true,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 33,
+                        vertical: 28,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Color(0xff151515),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                      ),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Добавить лицензии",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "OpenSans",
+                            ),
+                          ),
+                          SizedBox(height: 52),
+                          LicenseWidget(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

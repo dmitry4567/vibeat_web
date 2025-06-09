@@ -17,6 +17,7 @@ import 'package:vibeat_web/features/allLicenses/data/datasource/all_licenses_rem
 import 'package:vibeat_web/features/allLicenses/data/repositories/all_licenses_repository_impl.dart';
 import 'package:vibeat_web/features/allLicenses/domain/repositories/all_licenses_repositories.dart';
 import 'package:vibeat_web/features/allLicenses/domain/usecases/get_all_licenses.dart';
+import 'package:vibeat_web/features/allLicenses/domain/usecases/make_empty_license.dart';
 import 'package:vibeat_web/features/allLicenses/presentation/bloc/bloc/all_licenses_bloc.dart';
 import 'package:vibeat_web/features/anketa/data/datasource/anketa_remote_data_sourse.dart';
 import 'package:vibeat_web/features/anketa/data/repositories/anketa_repository_impl.dart';
@@ -120,6 +121,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => AllLicensesBloc(
       getAllLicenses: sl(),
+      makeEmptyLicense: sl(),
     ),
   );
 
@@ -170,6 +172,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddCoverFile(sl()));
   sl.registerLazySingleton(() => PublishBeat(sl()));
   sl.registerLazySingleton(() => GetAllLicenses(sl()));
+  sl.registerLazySingleton(() => MakeEmptyLicense(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(

@@ -8,7 +8,7 @@ import 'package:vibeat_web/features/allBeats/data/models/beat_model.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/responsive.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/tag_widget.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_tags/tag_widget.dart';
 
 @RoutePage()
 class AllBeatsPage extends StatefulWidget {

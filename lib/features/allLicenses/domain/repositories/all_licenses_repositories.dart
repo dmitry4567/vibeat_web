@@ -4,4 +4,5 @@ import '../../../../core/error/failures.dart';
 
 abstract class AllLicensesRepository {
   Future<Either<Failure, List<LicenseEntity>>> getAllLicenses();
+  Future<Either<Failure, LicenseEntity>> makeEmptyLicense();
 }

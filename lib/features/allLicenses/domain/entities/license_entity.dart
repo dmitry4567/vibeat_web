@@ -31,18 +31,18 @@ class LicenseEntity extends Equatable {
 
   factory LicenseEntity.fromJson(Map<String, dynamic> json) {
     return LicenseEntity(
-      id: json['id'] as String,
+      id: json['id'].toString(),
       name: json['name'] as String,
-      mp3: bool.parse(json['mp3']),
-      wav: bool.parse(json['wav']),
-      zip: bool.parse(json['zip']),
+      mp3: bool.parse(json['mp3'].toString()),
+      wav: bool.parse(json['wav'].toString()),
+      zip: bool.parse(json['zip'].toString()),
       description: json['description'] as String,
-      musicRecording: bool.parse(json['musicRecording']),
-      liveProfit: bool.parse(json['liveProfit']),
-      distributeCopies: int.parse(json['distributeCopies']),
-      audioStreams: int.parse(json['audioStreams']),
-      radioBroadcasting: int.parse(json['radioBroadcasting']),
-      musicVideos: int.parse(json['musicVideos']),
+      musicRecording: bool.parse(json['musicRecording'].toString()),
+      liveProfit: bool.parse(json['liveProfit'].toString()),
+      distributeCopies: int.parse(json['distributeCopies'].toString()),
+      audioStreams: int.parse(json['audioStreams'].toString()),
+      radioBroadcasting: int.parse(json['radioBroadcasting'].toString()),
+      musicVideos: int.parse(json['musicVideos'].toString()),
     );
   }
   LicenseEntity copyWith({

@@ -8,3 +8,7 @@ sealed class AllLicensesEvent extends Equatable {
 }
 
 class GetAllLicensesEvent extends AllLicensesEvent {}
+
+class MakeEmptyLicenseEvent  extends AllLicensesEvent {}
+
+class ResetMakeEmptyLicenseSuccessEvent extends AllLicensesEvent {}

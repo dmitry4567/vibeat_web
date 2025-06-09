@@ -11,7 +11,7 @@ import 'package:vibeat_web/_.dart';
 
 import '../features/editBeat/presentation/pages/edit_beat_page.dart';
 import '../features/allBeats/presentation/pages/all_beats_page.dart';
-import '../edit_license_page.dart';
+import '../features/editLicense/edit_license_page.dart';
 
 part 'app_router.gr.dart'; // Генерируемый файл
 

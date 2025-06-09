@@ -2,9 +2,11 @@ import 'dart:developer';
 import 'package:dio/dio.dart' as d;
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/features/allLicenses/data/models/licenses_model.dart';
+import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 
 abstract class AllLicensesRemoteDataSource {
   Future<List<LicenseModel>> getAllLicenses();
+  Future<LicenseEntity> makeEmptyLicense();
 }
 
 class AllLicensesRemoteDataSourceImpl implements AllLicensesRemoteDataSource {
@@ -64,5 +66,22 @@ class AllLicensesRemoteDataSourceImpl implements AllLicensesRemoteDataSource {
       log('Error in getAnketa: $e');
       throw Exception('Failed to load anketa: $e');
     }
+  }
+
+  @override
+  Future<LicenseEntity> makeEmptyLicense() async {
+    final data = await _apiClient.post(
+      'license/newLicenseTemplate',
+      options: d.Options(),
+      data: {}
+    );
+
+    if (data.statusCode == 201) {
+      final responseData = data.data;
+
+      return LicenseEntity.fromJson(responseData);
+    }
+
+    throw Exception('Failed to create beat');
   }
 }
