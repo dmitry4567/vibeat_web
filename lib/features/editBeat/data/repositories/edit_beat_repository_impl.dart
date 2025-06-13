@@ -5,7 +5,7 @@ import 'package:vibeat_web/core/network/network_info.dart';
 import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 class EditBeatRepositoryImpl implements EditBeatRepository {
   final EditBeatRemoteDataSource remoteDataSource;

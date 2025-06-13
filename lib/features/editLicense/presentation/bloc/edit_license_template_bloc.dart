@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
+import 'package:vibeat_web/features/editLicense/domain/usecases/save_draft_license.dart';
 
 part 'edit_license_template_event.dart';
 part 'edit_license_template_state.dart';
@@ -12,9 +14,12 @@ part 'edit_license_template_state.dart';
 class EditLicenseTemplateBloc
     extends Bloc<EditLicenseTemplateEvent, LicenseTemplateState> {
   final dio = Dio();
+  final SaveDraftLicense saveDraftLicense;
 
-  EditLicenseTemplateBloc({required LicenseEntity templateLicense})
-      : super(EditLicenseTemplateState(
+  EditLicenseTemplateBloc({
+    required this.saveDraftLicense,
+    required LicenseEntity templateLicense,
+  }) : super(EditLicenseTemplateState(
           templateLicense: templateLicense,
           isSavedSuccess: false,
         )) {
@@ -212,75 +217,78 @@ class EditLicenseTemplateBloc
       SaveDraftLicenseEvent event, Emitter<LicenseTemplateState> emit) async {
     final currentState = state as EditLicenseTemplateState;
 
-    emit(currentState.copyWith(
-      isSavedSuccess: false,
-    ));
+    final result = await saveDraftLicense.call(currentState.templateLicense);
 
-    final templateLicense = currentState.templateLicense;
+    result.fold(
+      (failure) => emit(currentState.copyWith(
+        isSavedSuccess: false,
+      )),
+      (result) => emit(currentState.copyWith(
+        isSavedSuccess: true,
+      )),
+    );
 
-    final Map<String, dynamic> requestData = {"id": templateLicense.id};
+    // final templateLicense = currentState.templateLicense;
 
-    requestData["name"] = templateLicense.name;
+    // final Map<String, dynamic> requestData = {"id": templateLicense.id};
 
-    requestData["description"] = templateLicense.description;
+    // requestData["name"] = templateLicense.name;
 
-    requestData["mp3"] = templateLicense.mp3;
-    requestData["wav"] = templateLicense.wav;
-    requestData["zip"] = templateLicense.zip;
+    // requestData["description"] = templateLicense.description;
 
-    requestData["liveProfit"] = templateLicense.liveProfit;
-    requestData["musicRecording"] = templateLicense.musicRecording;
+    // requestData["mp3"] = templateLicense.mp3;
+    // requestData["wav"] = templateLicense.wav;
+    // requestData["zip"] = templateLicense.zip;
 
-    if (templateLicense.unlimDistributeCopies == true) {
-      requestData["distributeCopies"] = -1;
-    } else {
-      requestData["distributeCopies"] = templateLicense.distributeCopies;
-    }
+    // requestData["liveProfit"] = templateLicense.liveProfit;
+    // requestData["musicRecording"] = templateLicense.musicRecording;
 
-    if (templateLicense.unlimAudioStreams == true) {
-      requestData["audioStreams"] = -1;
-    } else {
-      requestData["audioStreams"] = templateLicense.audioStreams;
-    }
+    // if (templateLicense.unlimDistributeCopies == true) {
+    //   requestData["distributeCopies"] = -1;
+    // } else {
+    //   requestData["distributeCopies"] = templateLicense.distributeCopies;
+    // }
 
-    if (templateLicense.unlimRadioBroadcasting == true) {
-      requestData["radioBroadcasting"] = -1;
-    } else {
-      requestData["radioBroadcasting"] = templateLicense.radioBroadcasting;
-    }
+    // if (templateLicense.unlimAudioStreams == true) {
+    //   requestData["audioStreams"] = -1;
+    // } else {
+    //   requestData["audioStreams"] = templateLicense.audioStreams;
+    // }
 
-    if (templateLicense.unlimMusicVideos == true) {
-      requestData["musicVideos"] = -1;
-    } else {
-      requestData["musicVideos"] = templateLicense.musicVideos;
-    }
+    // if (templateLicense.unlimRadioBroadcasting == true) {
+    //   requestData["radioBroadcasting"] = -1;
+    // } else {
+    //   requestData["radioBroadcasting"] = templateLicense.radioBroadcasting;
+    // }
 
-    log(requestData.toString());
+    // if (templateLicense.unlimMusicVideos == true) {
+    //   requestData["musicVideos"] = -1;
+    // } else {
+    //   requestData["musicVideos"] = templateLicense.musicVideos;
+    // }
 
-    try {
-      final response = await dio.patch(
-        "http://$url:7775/api/license/licenseTemplate",
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAwNjk1NzksImlhdCI6MTc0OTgxMDM3OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyLCJ1c2VybmFtZSI6IiJ9.6j76FpxRSu1Z7hvCKzbp_Es42spd9YJlKrt4o_FppWM'
-        }),
-        data: requestData,
-      );
+    // try {
+    //   final response = await dio.patch(
+    //     "http://$url:7775/api/license/licenseTemplate",
+    //     options: Options(headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization':
+    //           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAwNjk1NzksImlhdCI6MTc0OTgxMDM3OSwiaWQiOiIwMTk2ZGUzOC1iODJlLTc0YWYtOWRkOC1lZDU2YzkxZjFlMWYiLCJyb2xlIjoyLCJ1c2VybmFtZSI6IiJ9.6j76FpxRSu1Z7hvCKzbp_Es42spd9YJlKrt4o_FppWM'
+    //     }),
+    //     data: requestData,
+    //   );
 
-      log(response.data.toString());
+    //   if (response.statusCode == 200) {
+    //     final currentState = state as EditLicenseTemplateState;
 
-      if (response.statusCode == 200) {
-        final currentState = state as EditLicenseTemplateState;
+    //     log("update license");
 
-        log("update license");
-
-        emit(currentState.copyWith(
-          isSavedSuccess: true,
-        ));
-      }
-    } catch (e) {
-      log(e.toString());
-    }
+    //     emit(currentState.copyWith(
+    //       isSavedSuccess: true,
+    //     ));
+    //   }
+    // } catch (e) {
+    //   log(e.toString());
+    // }
   }
 }

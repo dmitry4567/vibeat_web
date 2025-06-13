@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:vibeat_web/core/error/failures.dart';
-import 'package:vibeat_web/core/usercases/usecase.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 class PublishBeat {
   final EditBeatRepository repository;

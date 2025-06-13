@@ -8,12 +8,11 @@ import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
+import 'package:vibeat_web/features/editBeat/domain/usecases/add_mp3.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
-
-import '../../domain/usecases/add_mp3.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 part 'edit_beat_event.dart';
 part 'edit_beat_state.dart';

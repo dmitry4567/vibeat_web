@@ -38,12 +38,12 @@ class AppRouter extends RootStackRouter {
             ),
             CustomRoute(
               path: 'allBeats',
+              initial: true,
               page: AllBeatsRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),
             CustomRoute(
               path: 'allLicense',
-              initial: true,
               page: AllLicenseRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
             ),

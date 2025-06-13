@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart' as d;
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 abstract class EditBeatRemoteDataSource {
   Future<bool> addMp3File(

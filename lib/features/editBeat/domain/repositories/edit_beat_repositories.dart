@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:vibeat_web/core/error/failures.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 abstract class EditBeatRepository {
   Future<Either<Failure, bool>> addMp3File(
