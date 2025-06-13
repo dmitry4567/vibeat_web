@@ -39,39 +39,39 @@ class _EditBeatPageState extends State<EditBeatPage> {
   double progress = 0;
   final bool _switchValue = false;
 
-  Future<void> deleteFile() async {
-    final response = await dio.post(
-      "http://192.168.0.135:7774/api/presigned/getPresignedDeleteRequest",
-      data: {
-        "BucketName": "beatsfordiplomaexample",
-        "ObjectKey": nameFile1,
-      },
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
+  // Future<void> deleteFile() async {
+  //   final response = await dio.post(
+  //     "http://192.168.0.135:7774/api/presigned/getPresignedDeleteRequest",
+  //     data: {
+  //       "BucketName": "beatsfordiplomaexample",
+  //       "ObjectKey": nameFile1,
+  //     },
+  //     options: Options(headers: {
+  //       'Content-Type': 'application/json',
+  //     }),
+  //   );
 
-    final url = response.data['data']['URL'];
+  //   final url = response.data['data']['URL'];
 
-    final response2 = await dio.delete(
-      'https://cors-anywhere.herokuapp.com/' + url,
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
-    );
+  //   final response2 = await dio.delete(
+  //     'https://cors-anywhere.herokuapp.com/' + url,
+  //     options: Options(headers: {
+  //       'Content-Type': 'application/json',
+  //     }),
+  //   );
 
-    if (response2.statusCode == 204) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$nameFile1 deleted successfully')),
-      );
+  //   if (response2.statusCode == 204) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('$nameFile1 deleted successfully')),
+  //     );
 
-      setState(() {
-        fileAdded = false;
-        nameFile1 = '';
-        isUploading = false;
-      });
-    }
-  }
+  //     setState(() {
+  //       fileAdded = false;
+  //       nameFile1 = '';
+  //       isUploading = false;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
