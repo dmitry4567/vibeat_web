@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ConditionsWidget extends StatefulWidget {
-  const ConditionsWidget(
-      {super.key, required this.title, required this.description});
+  ConditionsWidget({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.value,
+    required this.onChanged,
+  });
 
   final String title;
   final String description;
+  bool value;
+  final Function(bool) onChanged;
 
   @override
   State<ConditionsWidget> createState() => _ConditionsWidgetState();
 }
 
 class _ConditionsWidgetState extends State<ConditionsWidget> {
-  bool value = false;
   int price = 0;
 
   @override
@@ -25,11 +31,11 @@ class _ConditionsWidgetState extends State<ConditionsWidget> {
         bottom: 10,
       ),
       decoration: BoxDecoration(
-        color: value
+        color: widget.value
             ? const Color(0xff1E1E1E)
             : const Color(0xff1E1E1E).withOpacity(0.4),
         border: Border.all(
-          color: value
+          color: widget.value
               ? const Color(0xffffffff).withOpacity(0.1)
               : const Color(0xffffffff).withOpacity(0.05),
         ),
@@ -49,7 +55,9 @@ class _ConditionsWidgetState extends State<ConditionsWidget> {
                 widget.title,
                 style: TextStyle(
                   fontSize: 16,
-                  color: value ? Colors.white : Colors.white.withOpacity(0.8),
+                  color: widget.value
+                      ? Colors.white
+                      : Colors.white.withOpacity(0.8),
                   fontWeight: FontWeight.w500,
                   fontFamily: "Helvetica",
                 ),
@@ -59,7 +67,7 @@ class _ConditionsWidgetState extends State<ConditionsWidget> {
                 widget.description,
                 style: TextStyle(
                   fontSize: 12,
-                  color: value
+                  color: widget.value
                       ? Colors.white.withOpacity(0.6)
                       : Colors.white.withOpacity(0.4),
                   fontWeight: FontWeight.w500,
@@ -98,11 +106,9 @@ class _ConditionsWidgetState extends State<ConditionsWidget> {
                 //     return null;
                 //   },
                 // ),
-                value: value,
+                value: widget.value,
                 onChanged: (bool newValue) {
-                  setState(() {
-                    value = newValue;
-                  });
+                  widget.onChanged(newValue); // Вызываем callback
                 },
               ),
             ],

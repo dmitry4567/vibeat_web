@@ -90,3 +90,7 @@ class PublishBeatEvent extends EditBeatEvent {
 class PublishBeatSuccess extends EditBeatEvent {
   const PublishBeatSuccess();
 }
+
+class GetDataTemplateLicense extends EditBeatEvent {
+  const GetDataTemplateLicense();
+}

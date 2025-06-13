@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/tag_widget.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_tags/tag_widget.dart';
 
 class EditTags extends StatefulWidget {
   const EditTags({super.key});
@@ -152,7 +153,7 @@ Future<List<TagEntity>?> tagDialog(BuildContext context) async {
               final dio = Dio();
               try {
                 final response = await dio.get(
-                  "http://192.168.0.135:7772/api/metadata/tags",
+                  "http://$url:7772/api/metadata/tags",
                   options: Options(headers: {
                     'Content-Type': 'application/json',
                   }),
@@ -174,7 +175,7 @@ Future<List<TagEntity>?> tagDialog(BuildContext context) async {
               final dio = Dio();
               try {
                 final response = await dio.get(
-                  "http://192.168.0.135:7772/api/metadata/tags",
+                  "http://$url:7772/api/metadata/tags",
                   options: Options(headers: {
                     'Content-Type': 'application/json',
                   }),

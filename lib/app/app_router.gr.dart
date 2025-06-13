@@ -70,12 +70,14 @@ class AnketaRoute extends PageRouteInfo<void> {
 /// [EditBeatPage]
 class EditBeatRoute extends PageRouteInfo<EditBeatRouteArgs> {
   EditBeatRoute({
+    Key? key,
     required BeatEntity beat,
     required bool isEditMode,
     List<PageRouteInfo>? children,
   }) : super(
           EditBeatRoute.name,
           args: EditBeatRouteArgs(
+            key: key,
             beat: beat,
             isEditMode: isEditMode,
           ),
@@ -89,6 +91,7 @@ class EditBeatRoute extends PageRouteInfo<EditBeatRouteArgs> {
     builder: (data) {
       final args = data.argsAs<EditBeatRouteArgs>();
       return EditBeatPage(
+        key: args.key,
         beat: args.beat,
         isEditMode: args.isEditMode,
       );
@@ -98,9 +101,12 @@ class EditBeatRoute extends PageRouteInfo<EditBeatRouteArgs> {
 
 class EditBeatRouteArgs {
   const EditBeatRouteArgs({
+    this.key,
     required this.beat,
     required this.isEditMode,
   });
+
+  final Key? key;
 
   final BeatEntity beat;
 
@@ -108,16 +114,23 @@ class EditBeatRouteArgs {
 
   @override
   String toString() {
-    return 'EditBeatRouteArgs{beat: $beat, isEditMode: $isEditMode}';
+    return 'EditBeatRouteArgs{key: $key, beat: $beat, isEditMode: $isEditMode}';
   }
 }
 
 /// generated route for
 /// [EditLicensePage]
-class EditLicenseRoute extends PageRouteInfo<void> {
-  const EditLicenseRoute({List<PageRouteInfo>? children})
-      : super(
+class EditLicenseRoute extends PageRouteInfo<EditLicenseRouteArgs> {
+  EditLicenseRoute({
+    Key? key,
+    required LicenseEntity templateLicense,
+    List<PageRouteInfo>? children,
+  }) : super(
           EditLicenseRoute.name,
+          args: EditLicenseRouteArgs(
+            key: key,
+            templateLicense: templateLicense,
+          ),
           initialChildren: children,
         );
 
@@ -126,9 +139,29 @@ class EditLicenseRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const EditLicensePage();
+      final args = data.argsAs<EditLicenseRouteArgs>();
+      return EditLicensePage(
+        key: args.key,
+        templateLicense: args.templateLicense,
+      );
     },
   );
+}
+
+class EditLicenseRouteArgs {
+  const EditLicenseRouteArgs({
+    this.key,
+    required this.templateLicense,
+  });
+
+  final Key? key;
+
+  final LicenseEntity templateLicense;
+
+  @override
+  String toString() {
+    return 'EditLicenseRouteArgs{key: $key, templateLicense: $templateLicense}';
+  }
 }
 
 /// generated route for

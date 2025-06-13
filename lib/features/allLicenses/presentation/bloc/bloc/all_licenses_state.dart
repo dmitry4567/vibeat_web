@@ -5,7 +5,7 @@ enum AllLicenseStatus { initial, loading, success, error }
 class AllLicensesState extends Equatable {
   final AllLicenseStatus? status;
   final List<LicenseEntity>? licenses;
-  // final bool? makeEmptyBeatSuccess;
+  final bool? makeEmptyLicenseSuccess;
   // final bool? deleteBeatSuccess;
   final String? errorMessage;
   final LicenseEntity? newLicense;
@@ -13,7 +13,7 @@ class AllLicensesState extends Equatable {
   const AllLicensesState({
     this.status,
     this.licenses,
-    // this.makeEmptyBeatSuccess,
+    this.makeEmptyLicenseSuccess,
     // this.deleteBeatSuccess,
     this.errorMessage,
     this.newLicense,
@@ -22,7 +22,7 @@ class AllLicensesState extends Equatable {
   AllLicensesState copyWith({
     AllLicenseStatus? status,
     List<LicenseEntity>? licenses,
-    bool? makeEmptyBeatSuccess,
+    bool? makeEmptyLicenseSuccess,
     bool? deleteBeatSuccess,
     String? errorMessage,
     LicenseEntity? newLicense,
@@ -30,7 +30,7 @@ class AllLicensesState extends Equatable {
     return AllLicensesState(
       status: status ?? this.status,
       licenses: licenses ?? this.licenses,
-      // makeEmptyBeatSuccess: makeEmptyBeatSuccess ?? this.makeEmptyBeatSuccess,
+      makeEmptyLicenseSuccess: makeEmptyLicenseSuccess ?? this.makeEmptyLicenseSuccess,
       // deleteBeatSuccess: deleteBeatSuccess ?? this.deleteBeatSuccess,
       errorMessage: errorMessage ?? this.errorMessage,
       newLicense: newLicense ?? this.newLicense,
@@ -41,7 +41,7 @@ class AllLicensesState extends Equatable {
   List<Object?> get props => [
         status,
         licenses,
-        // makeEmptyBeatSuccess,
+        makeEmptyLicenseSuccess,
         // deleteBeatSuccess,
         errorMessage,
         newLicense,

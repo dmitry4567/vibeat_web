@@ -75,6 +75,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _currentRoute = 'allBeats';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,11 +179,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    context.router.replaceNamed('allBeats');
+                    setState(() {
+                      _currentRoute = 'allBeats';
+                      context.router.replaceNamed('allBeats');
+                    });
                   },
                   elevation: 0,
                   hoverColor: Colors.white12,
-                  // color: Colors.white12,
+                  color: _currentRoute == 'allBeats'
+                      ? Colors.white10
+                      : Colors.transparent,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
                     vertical: 18,
@@ -206,11 +213,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    context.router.replaceNamed('allLicense');
+                    setState(() {
+                      _currentRoute = 'allLicense';
+                      context.router.replaceNamed('allLicense');
+                    });
                   },
                   elevation: 0,
-                  hoverColor: Colors.white12,
-                  // color: Colors.white12,
+                  hoverColor: Colors.white10,
+                  color: _currentRoute == 'allLicense'
+                      ? Colors.white12
+                      : Colors.transparent,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
                     vertical: 18,

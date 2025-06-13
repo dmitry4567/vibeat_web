@@ -72,19 +72,21 @@ class BeatEditState extends BeatState {
   final bool isSavedSuccess;
   final bool isBeatPublish;
 
-  BeatEditState({
-    required this.beat,
-    required this.isMp3Loading,
-    required this.progressMp3,
-    required this.isWavLoading,
-    required this.progressWav,
-    required this.isZipLoading,
-    required this.progressZip,
-    required this.isCoverLoading,
-    required this.progressCover,
-    required this.isSavedSuccess,
-    required this.isBeatPublish
-  });
+  final List<LicenseTemplateEntity> templateLicense;
+
+  BeatEditState(
+      {required this.beat,
+      required this.isMp3Loading,
+      required this.progressMp3,
+      required this.isWavLoading,
+      required this.progressWav,
+      required this.isZipLoading,
+      required this.progressZip,
+      required this.isCoverLoading,
+      required this.progressCover,
+      required this.isSavedSuccess,
+      required this.isBeatPublish,
+      required this.templateLicense});
 
   BeatEditState copyWith({
     BeatEntity? beat,
@@ -98,6 +100,7 @@ class BeatEditState extends BeatState {
     double? progressCover,
     bool? isSavedSuccess,
     bool? isBeatPublish,
+    List<LicenseTemplateEntity>? templateLicense,
   }) {
     return BeatEditState(
       beat: beat ?? this.beat,
@@ -110,7 +113,8 @@ class BeatEditState extends BeatState {
       isCoverLoading: isCoverLoading ?? this.isCoverLoading,
       progressCover: progressCover ?? this.progressCover,
       isSavedSuccess: isSavedSuccess ?? this.isSavedSuccess,
-      isBeatPublish: isBeatPublish ?? this.isBeatPublish
+      isBeatPublish: isBeatPublish ?? this.isBeatPublish,
+      templateLicense: templateLicense ?? this.templateLicense,
     );
   }
 
@@ -126,7 +130,8 @@ class BeatEditState extends BeatState {
         isCoverLoading,
         progressCover,
         isSavedSuccess,
-        isBeatPublish
+        isBeatPublish,
+        templateLicense
       ];
 }
 

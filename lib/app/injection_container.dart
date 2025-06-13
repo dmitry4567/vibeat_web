@@ -15,8 +15,10 @@ import 'package:vibeat_web/features/allBeats/domain/usecases/make_empty_beat.dar
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/features/allLicenses/data/datasource/all_licenses_remote_data_sourse.dart';
 import 'package:vibeat_web/features/allLicenses/data/repositories/all_licenses_repository_impl.dart';
+import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 import 'package:vibeat_web/features/allLicenses/domain/repositories/all_licenses_repositories.dart';
 import 'package:vibeat_web/features/allLicenses/domain/usecases/get_all_licenses.dart';
+import 'package:vibeat_web/features/allLicenses/domain/usecases/make_empty_license.dart';
 import 'package:vibeat_web/features/allLicenses/presentation/bloc/bloc/all_licenses_bloc.dart';
 import 'package:vibeat_web/features/anketa/data/datasource/anketa_remote_data_sourse.dart';
 import 'package:vibeat_web/features/anketa/data/repositories/anketa_repository_impl.dart';
@@ -33,6 +35,11 @@ import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
+import 'package:vibeat_web/features/editLicense/data/datasource/edit_license_remote_data_sourse.dart';
+import 'package:vibeat_web/features/editLicense/data/repositories/edit_license_repository_impl.dart';
+import 'package:vibeat_web/features/editLicense/domain/repositories/edit_license_repositories.dart';
+import 'package:vibeat_web/features/editLicense/domain/usecases/save_draft_license.dart';
+import 'package:vibeat_web/features/editLicense/presentation/bloc/edit_license_template_bloc.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
 import '../features/signIn/data/repositories/auth_repository_impl.dart';
@@ -41,6 +48,7 @@ import 'package:google_sign_in_platform_interface/google_sign_in_platform_interf
 final sl = GetIt.instance;
 
 // const url = "158.160.27.143";
+// const url = "192.168.43.240";
 const url = "192.168.0.135";
 
 Future<void> init() async {
@@ -86,7 +94,6 @@ Future<void> init() async {
   // await apiClient.initialize('http://192.168.0.135:8080/');
   await apiClient.initialize('http://$url:8080/');
 
-  // Add auth interceptor
   sl<Dio>().interceptors.add(sl<AuthInterceptor>());
 
   // BLoCs
@@ -117,9 +124,16 @@ Future<void> init() async {
       publishBeat: sl(),
     ),
   );
+  sl.registerFactoryParam<EditLicenseTemplateBloc, LicenseEntity, dynamic>(
+    (templateLicense, _) => EditLicenseTemplateBloc(
+      saveDraftLicense: sl(),
+      templateLicense: templateLicense,
+    ),
+  );
   sl.registerFactory(
     () => AllLicensesBloc(
       getAllLicenses: sl(),
+      makeEmptyLicense: sl(),
     ),
   );
 
@@ -138,7 +152,6 @@ Future<void> init() async {
       remoteDataSource: sl(),
     ),
   );
-
   sl.registerLazySingleton<AllBeatRepository>(
     () => AllBeatRepositoryImpl(
       networkInfo: sl(),
@@ -157,6 +170,12 @@ Future<void> init() async {
       remoteDataSource: sl(),
     ),
   );
+  sl.registerLazySingleton<EditLicenseRepository>(
+    () => EditLicenseRepositoryImpl(
+      networkInfo: sl(),
+      remoteDataSource: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetAnketa(sl()));
@@ -170,21 +189,23 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddCoverFile(sl()));
   sl.registerLazySingleton(() => PublishBeat(sl()));
   sl.registerLazySingleton(() => GetAllLicenses(sl()));
+  sl.registerLazySingleton(() => MakeEmptyLicense(sl()));
+  sl.registerLazySingleton(() => SaveDraftLicense(sl()));
 
   // Data sources
   sl.registerLazySingleton<AnketaRemoteDataSource>(
     () => AnketaRemoteDataSourceImpl(apiClient: sl()),
   );
-
   sl.registerLazySingleton<AllBeatRemoteDataSource>(
     () => AllBeatRemoteDataSourceImpl(apiClient: sl()),
   );
-
   sl.registerLazySingleton<EditBeatRemoteDataSource>(
     () => EditBeatRemoteDataSourceImpl(apiClient: sl()),
   );
-
   sl.registerLazySingleton<AllLicensesRemoteDataSource>(
     () => AllLicensesRemoteDataSourceImpl(apiClient: sl()),
+  );
+  sl.registerLazySingleton<EditLicenseRemoteDataSource>(
+    () => EditLicenseRemoteDataSourceImpl(apiClient: sl()),
   );
 }

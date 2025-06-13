@@ -43,10 +43,10 @@ class ApiClient {
     ));
 
     dio.interceptors.add(LogInterceptor(
-      request: true,
-      requestHeader: true,
+      request: false,
+      requestHeader: false,
       requestBody: true,
-      responseHeader: true,
+      responseHeader: false,
       responseBody: true,
       error: true,
     ));

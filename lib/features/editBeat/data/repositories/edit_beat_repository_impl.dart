@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:vibeat_web/core/error/exceptions.dart';
 import 'package:vibeat_web/core/error/failures.dart';
 import 'package:vibeat_web/core/network/network_info.dart';
-import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/data/datasource/edit_beat_remote_data_sourse.dart';
 import 'package:vibeat_web/features/editBeat/domain/repositories/edit_beat_repositories.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
+import 'package:vibeat_web/features/editLicense/data/models/license_template_entity.dart';
 
 class EditBeatRepositoryImpl implements EditBeatRepository {
   final EditBeatRemoteDataSource remoteDataSource;
@@ -107,10 +105,11 @@ class EditBeatRepositoryImpl implements EditBeatRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> publishBeat(PublishBeatEvent event) async {
+  Future<Either<Failure, bool>> publishBeat(PublishBeatEvent event,
+      List<LicenseTemplateEntity> templateLicense) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.publishBeat(event);
+        final result = await remoteDataSource.publishBeat(event, templateLicense);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
