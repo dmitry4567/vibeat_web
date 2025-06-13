@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
+import 'package:vibeat_web/features/editLicense/presentation/bloc/edit_license_template_bloc.dart';
 
-class BasicData extends StatefulWidget {
-  const BasicData({super.key});
+class BasicDataLicense extends StatefulWidget {
+  const BasicDataLicense({super.key});
 
   @override
-  State<BasicData> createState() => _BasicDataState();
+  State<BasicDataLicense> createState() => _BasicDataLicenseState();
 }
 
-class _BasicDataState extends State<BasicData> {
+class _BasicDataLicenseState extends State<BasicDataLicense> {
   late TextEditingController nameController;
   late TextEditingController descController;
+
+  bool mp3 = false;
+  bool wav = false;
+  bool zip = false;
 
   @override
   void initState() {
     super.initState();
-    final state = context.read<EditBeatBloc>().state;
+    final state = context.read<EditLicenseTemplateBloc>().state;
 
-    if (state is BeatEditState) {
-      nameController = TextEditingController(text: state.beat.name);
-      descController = TextEditingController(text: state.beat.description);
+    if (state is EditLicenseTemplateState) {
+      nameController = TextEditingController(text: state.templateLicense.name);
+      descController =
+          TextEditingController(text: state.templateLicense.description);
+      mp3 = state.templateLicense.mp3;
+      wav = state.templateLicense.wav;
+      zip = state.templateLicense.zip;
     }
   }
 
   @override
   void dispose() {
     nameController.dispose();
+    descController.dispose();
     super.dispose();
   }
 
@@ -60,12 +69,12 @@ class _BasicDataState extends State<BasicData> {
             ),
             const SizedBox(height: 32),
             SizedBox(
-              width: 545,
+              width: 545, //?
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Название",
+                    "Название лицензии",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.8),
@@ -76,10 +85,10 @@ class _BasicDataState extends State<BasicData> {
                   const SizedBox(
                     height: 6,
                   ),
-                  BlocBuilder<EditBeatBloc, BeatState>(
+                  BlocBuilder<EditLicenseTemplateBloc, LicenseTemplateState>(
                     builder: (context, state) {
-                      if (state is BeatEditState) {
-                        nameController.text = state.beat.name;
+                      if (state is EditLicenseTemplateState) {
+                        nameController.text = state.templateLicense.name;
 
                         nameController.selection = TextSelection.fromPosition(
                           TextPosition(offset: nameController.text.length),
@@ -88,13 +97,13 @@ class _BasicDataState extends State<BasicData> {
                         return TextFormField(
                           textAlignVertical: TextAlignVertical.center,
                           controller: nameController,
-                          obscureText: false,
-                          autofocus: false,
                           onChanged: (value) {
-                            context.read<EditBeatBloc>().add(
+                            context.read<EditLicenseTemplateBloc>().add(
                                   ChangeName(name: value),
                                 );
                           },
+                          obscureText: false,
+                          autofocus: false,
                           decoration: InputDecoration(
                             hintText: '',
                             hintStyle: TextStyle(
@@ -154,7 +163,7 @@ class _BasicDataState extends State<BasicData> {
                     },
                   ),
                   Text(
-                    "Описание",
+                    "Описание лицензии",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.8),
@@ -165,11 +174,13 @@ class _BasicDataState extends State<BasicData> {
                     height: 6,
                   ),
                   SizedBox(
-                    height: 160,
-                    child: BlocBuilder<EditBeatBloc, BeatState>(
+                    height: 120,
+                    child: BlocBuilder<EditLicenseTemplateBloc,
+                        LicenseTemplateState>(
                       builder: (context, state) {
-                        if (state is BeatEditState) {
-                          descController.text = state.beat.description;
+                        if (state is EditLicenseTemplateState) {
+                          descController.text =
+                              state.templateLicense.description;
 
                           descController.selection = TextSelection.fromPosition(
                             TextPosition(offset: descController.text.length),
@@ -178,16 +189,16 @@ class _BasicDataState extends State<BasicData> {
                           return TextFormField(
                             textAlignVertical: TextAlignVertical.top,
                             controller: descController,
+                            onChanged: (value) {
+                              context.read<EditLicenseTemplateBloc>().add(
+                                    ChangeDescription(description: value),
+                                  );
+                            },
                             obscureText: false,
                             autofocus: false,
                             minLines: null,
                             maxLines: null,
                             expands: true,
-                            onChanged: (value) {
-                              context.read<EditBeatBloc>().add(
-                                    ChangeDescription(description: value),
-                                  );
-                            },
                             // keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                               hintText: '',
@@ -247,6 +258,126 @@ class _BasicDataState extends State<BasicData> {
                         return Container();
                       },
                     ),
+                  ),
+                  Text(
+                    "Предоставляемые файлы",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.8),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                          right: 28,
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: Checkbox(
+                                value: mp3,
+                                onChanged: (value) {
+                                  setState(
+                                    () => mp3 = !mp3,
+                                  );
+                                  context
+                                      .read<EditLicenseTemplateBloc>()
+                                      .add(UpdateMp3Event(mp3));
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "MP3",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Helvetica",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                          right: 28,
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: Checkbox(
+                                value: wav,
+                                onChanged: (value) {
+                                  setState(
+                                    () => wav = !wav,
+                                  );
+                                  context
+                                      .read<EditLicenseTemplateBloc>()
+                                      .add(UpdateWavEvent(wav));
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "WAV",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Helvetica",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                          right: 28,
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: Checkbox(
+                                value: zip,
+                                onChanged: (value) {
+                                  setState(
+                                    () => zip = !zip,
+                                  );
+                                  context
+                                      .read<EditLicenseTemplateBloc>()
+                                      .add(UpdateZipEvent(zip));
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "TRACKOUT (STEMS)",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Helvetica",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

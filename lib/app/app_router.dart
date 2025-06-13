@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 import 'package:vibeat_web/features/allLicenses/presentation/pages/all_license_page.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/main.dart';
@@ -11,7 +13,7 @@ import 'package:vibeat_web/_.dart';
 
 import '../features/editBeat/presentation/pages/edit_beat_page.dart';
 import '../features/allBeats/presentation/pages/all_beats_page.dart';
-import '../features/editLicense/edit_license_page.dart';
+import '../features/editLicense/presentation/edit_license_page.dart';
 
 part 'app_router.gr.dart'; // Генерируемый файл
 

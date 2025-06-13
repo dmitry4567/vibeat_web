@@ -5,11 +5,13 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vibeat_web/app/injection_container.dart';
+import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_cover.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
 
 import '../../domain/usecases/add_mp3.dart';
 
@@ -17,8 +19,6 @@ part 'edit_beat_event.dart';
 part 'edit_beat_state.dart';
 
 class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
-  // final GetEditBeats getEditBeats;
-  // final MakeEmptyBeat makeEmptyBeat;
   final AddMp3File addMp3File;
   final AddWavFile addWavFile;
   final AddZipFile addZipFile;
@@ -34,8 +34,6 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     required this.addZipFile,
     required this.addCoverFile,
     required this.publishBeat,
-    // required this.getEditBeats,
-    // required this.makeEmptyBeat,
   }) : super(isEditMode
             ? BeatEditState(
                 beat: beat,
@@ -49,6 +47,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
                 progressCover: 0,
                 isSavedSuccess: false,
                 isBeatPublish: false,
+                templateLicense: const [],
               )
             : BeatViewState(beat)) {
     on<AddMp3FileEvent>(_addMp3File);
@@ -65,6 +64,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     on<SaveDraft>(_saveDraft);
     on<PublishBeatEvent>(_publishBeat);
     on<PublishBeatSuccess>(_publishBeatSuccess);
+    on<GetDataTemplateLicense>(_getDataTemplateLicense);
   }
 
   Future<void> _addMp3File(
@@ -338,7 +338,6 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
         emit(currentState.copyWith(
           isSavedSuccess: true,
         ));
-        // emit(currentState.copyWith(beat: currentState.beat));
       }
     } catch (e) {
       log(e.toString());
@@ -349,7 +348,7 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       PublishBeatEvent event, Emitter<BeatState> emit) async {
     final currentState = state as BeatEditState;
 
-    final result = await publishBeat.call(event);
+    final result = await publishBeat.call(event, currentState.templateLicense);
 
     result.fold(
       (failure) => emit(currentState.copyWith(
@@ -368,5 +367,50 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
     final currentState = state as BeatEditState;
 
     emit(currentState.copyWith(isBeatPublish: false));
+  }
+
+  Future<void> _getDataTemplateLicense(
+      GetDataTemplateLicense event, Emitter<BeatState> emit) async {
+    final currentState = state as BeatEditState;
+
+    List<LicenseTemplateEntity> license = [];
+
+    final response = await sl<ApiClient>().get(
+      "license/allLicenseTemplatesByBeatmakerJWT",
+      options: Options(),
+    );
+
+    if (response.statusCode == 200) {
+      final data = response.data['data'];
+      license = (data as List).map<LicenseTemplateEntity>((e) {
+        final distributeCopies = int.parse(e['distributeCopies'].toString());
+        final audioStreams = int.parse(e['audioStreams'].toString());
+        final radioBroadcasting = int.parse(e['radioBroadcasting'].toString());
+        final musicVideos = int.parse(e['musicVideos'].toString());
+
+        return LicenseTemplateEntity(
+          id: e['id'] as int,
+          name: e['name'] as String,
+          mp3: bool.parse(e['mp3'].toString()),
+          wav: bool.parse(e['wav'].toString()),
+          zip: bool.parse(e['zip'].toString()),
+          price: 0,
+          description: e['description'] as String,
+          musicRecording: bool.parse(e['musicRecording'].toString()),
+          liveProfit: bool.parse(e['liveProfit'].toString()),
+          distributeCopies: distributeCopies,
+          unlimDistributeCopies: distributeCopies == -1 ? true : false,
+          audioStreams: audioStreams,
+          unlimAudioStreams: audioStreams == -1 ? true : false,
+          radioBroadcasting: radioBroadcasting,
+          unlimRadioBroadcasting: radioBroadcasting == -1 ? true : false,
+          musicVideos: musicVideos,
+          unlimMusicVideos: musicVideos == -1 ? true : false,
+          isActive: false,
+        );
+      }).toList();
+
+      emit(currentState.copyWith(templateLicense: license));
+    }
   }
 }

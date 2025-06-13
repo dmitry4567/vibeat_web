@@ -33,9 +33,14 @@ class AllLicensesRepositoryImpl implements AllLicensesRepository {
                 musicRecording: e.musicRecording,
                 liveProfit: e.liveProfit,
                 distributeCopies: e.distributeCopies,
+                unlimDistributeCopies: e.distributeCopies == -1 ? true : false,
                 audioStreams: e.audioStreams,
+                unlimAudioStreams: e.audioStreams == -1 ? true : false,
                 radioBroadcasting: e.radioBroadcasting,
+                unlimRadioBroadcasting:
+                    e.radioBroadcasting == -1 ? true : false,
                 musicVideos: e.musicVideos,
+                unlimMusicVideos: e.musicVideos == -1 ? true : false,
               ),
             )
             .toList());

@@ -37,7 +37,7 @@ class AllLicensesRemoteDataSourceImpl implements AllLicensesRemoteDataSource {
       if (data.isNotEmpty) {
         final List<LicenseModel> licenses = (data as List)
             .map<LicenseModel>((e) => LicenseModel(
-                  id: e['id'].toString(),
+                  id: e['id'] as int,
                   name: e['name'] as String,
                   mp3: bool.parse(e['mp3'].toString()),
                   wav: bool.parse(e['wav'].toString()),

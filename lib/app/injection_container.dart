@@ -15,6 +15,7 @@ import 'package:vibeat_web/features/allBeats/domain/usecases/make_empty_beat.dar
 import 'package:vibeat_web/features/allBeats/presentation/bloc/all_beats_bloc.dart';
 import 'package:vibeat_web/features/allLicenses/data/datasource/all_licenses_remote_data_sourse.dart';
 import 'package:vibeat_web/features/allLicenses/data/repositories/all_licenses_repository_impl.dart';
+import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 import 'package:vibeat_web/features/allLicenses/domain/repositories/all_licenses_repositories.dart';
 import 'package:vibeat_web/features/allLicenses/domain/usecases/get_all_licenses.dart';
 import 'package:vibeat_web/features/allLicenses/domain/usecases/make_empty_license.dart';
@@ -34,6 +35,7 @@ import 'package:vibeat_web/features/editBeat/domain/usecases/add_wav.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/add_zip.dart';
 import 'package:vibeat_web/features/editBeat/domain/usecases/publish_beat.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
+import 'package:vibeat_web/features/editLicense/presentation/bloc/edit_license_template_bloc.dart';
 import 'package:vibeat_web/features/signIn/domain/repositories/auth_repository.dart';
 import 'package:vibeat_web/features/signIn/presentation/bloc/auth_bloc.dart';
 import '../features/signIn/data/repositories/auth_repository_impl.dart';
@@ -42,6 +44,7 @@ import 'package:google_sign_in_platform_interface/google_sign_in_platform_interf
 final sl = GetIt.instance;
 
 // const url = "158.160.27.143";
+// const url = "192.168.43.240";
 const url = "192.168.0.135";
 
 Future<void> init() async {
@@ -100,22 +103,27 @@ Future<void> init() async {
         getAnketa: sl(),
         sendAnketaResponse: sl(),
       ));
-  sl.registerFactory(
-    () => AllBeatBloc(
-      getAllBeats: sl(),
-      makeEmptyBeat: sl(),
-      deleteBeat: sl(),
-    ),
-  );
-  sl.registerFactoryParam<EditBeatBloc, BeatEntity, bool>(
-    (beat, isEditMode) => EditBeatBloc(
-      beat: beat,
-      isEditMode: isEditMode,
-      addMp3File: sl(),
-      addWavFile: sl(),
-      addZipFile: sl(),
-      addCoverFile: sl(),
-      publishBeat: sl(),
+  // sl.registerFactory(
+  //   () => AllBeatBloc(
+  //     getAllBeats: sl(),
+  //     makeEmptyBeat: sl(),
+  //     deleteBeat: sl(),
+  //   ),
+  // );
+  // sl.registerFactoryParam<EditBeatBloc, BeatEntity, bool>(
+  //   (beat, isEditMode) => EditBeatBloc(
+  //     beat: beat,
+  //     isEditMode: isEditMode,
+  //     addMp3File: sl(),
+  //     addWavFile: sl(),
+  //     addZipFile: sl(),
+  //     addCoverFile: sl(),
+  //     publishBeat: sl(),
+  //   ),
+  // );
+  sl.registerFactoryParam<EditLicenseTemplateBloc, LicenseEntity, dynamic>(
+    (templateLicense, _) => EditLicenseTemplateBloc(
+      templateLicense: templateLicense,
     ),
   );
   sl.registerFactory(
@@ -141,18 +149,18 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerLazySingleton<AllBeatRepository>(
-    () => AllBeatRepositoryImpl(
-      networkInfo: sl(),
-      remoteDataSource: sl(),
-    ),
-  );
-  sl.registerLazySingleton<EditBeatRepository>(
-    () => EditBeatRepositoryImpl(
-      networkInfo: sl(),
-      remoteDataSource: sl(),
-    ),
-  );
+  // sl.registerLazySingleton<AllBeatRepository>(
+  //   () => AllBeatRepositoryImpl(
+  //     networkInfo: sl(),
+  //     remoteDataSource: sl(),
+  //   ),
+  // );
+  // sl.registerLazySingleton<EditBeatRepository>(
+  //   () => EditBeatRepositoryImpl(
+  //     networkInfo: sl(),
+  //     remoteDataSource: sl(),
+  //   ),
+  // );
   sl.registerLazySingleton<AllLicensesRepository>(
     () => AllLicensesRepositoryImpl(
       networkInfo: sl(),
@@ -163,14 +171,14 @@ Future<void> init() async {
   // Use cases
   sl.registerLazySingleton(() => GetAnketa(sl()));
   sl.registerLazySingleton(() => SendAnketaResponse(sl()));
-  sl.registerLazySingleton(() => GetAllBeats(sl()));
-  sl.registerLazySingleton(() => MakeEmptyBeat(sl()));
-  sl.registerLazySingleton(() => DeleteBeat(sl()));
-  sl.registerLazySingleton(() => AddMp3File(sl()));
-  sl.registerLazySingleton(() => AddWavFile(sl()));
-  sl.registerLazySingleton(() => AddZipFile(sl()));
-  sl.registerLazySingleton(() => AddCoverFile(sl()));
-  sl.registerLazySingleton(() => PublishBeat(sl()));
+  // sl.registerLazySingleton(() => GetAllBeats(sl()));
+  // sl.registerLazySingleton(() => MakeEmptyBeat(sl()));
+  // sl.registerLazySingleton(() => DeleteBeat(sl()));
+  // sl.registerLazySingleton(() => AddMp3File(sl()));
+  // sl.registerLazySingleton(() => AddWavFile(sl()));
+  // sl.registerLazySingleton(() => AddZipFile(sl()));
+  // sl.registerLazySingleton(() => AddCoverFile(sl()));
+  // sl.registerLazySingleton(() => PublishBeat(sl()));
   sl.registerLazySingleton(() => GetAllLicenses(sl()));
   sl.registerLazySingleton(() => MakeEmptyLicense(sl()));
 
@@ -179,13 +187,13 @@ Future<void> init() async {
     () => AnketaRemoteDataSourceImpl(apiClient: sl()),
   );
 
-  sl.registerLazySingleton<AllBeatRemoteDataSource>(
-    () => AllBeatRemoteDataSourceImpl(apiClient: sl()),
-  );
+  // sl.registerLazySingleton<AllBeatRemoteDataSource>(
+  //   () => AllBeatRemoteDataSourceImpl(apiClient: sl()),
+  // );
 
-  sl.registerLazySingleton<EditBeatRemoteDataSource>(
-    () => EditBeatRemoteDataSourceImpl(apiClient: sl()),
-  );
+  // sl.registerLazySingleton<EditBeatRemoteDataSource>(
+  //   () => EditBeatRemoteDataSourceImpl(apiClient: sl()),
+  // );
 
   sl.registerLazySingleton<AllLicensesRemoteDataSource>(
     () => AllLicensesRemoteDataSourceImpl(apiClient: sl()),

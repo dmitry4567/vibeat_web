@@ -34,9 +34,9 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => di.sl<AuthBloc>(),
         ),
-        BlocProvider(
-          create: (context) => di.sl<AnketaBloc>(),
-        ),
+        // BlocProvider(
+        //   create: (context) => di.sl<AnketaBloc>(),
+        // ),
         BlocProvider(
           create: (context) => di.sl<AllBeatBloc>(),
         ),

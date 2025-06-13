@@ -43,9 +43,9 @@ class _AllLicensePageState extends State<AllLicensePage> {
           context
               .read<AllLicensesBloc>()
               .add(ResetMakeEmptyLicenseSuccessEvent());
-              
-          // context.router
-          //     .push(EditLicenseRoute(beat: state.newBeat!, isEditMode: true));
+
+          context.router
+              .push(EditLicenseRoute(templateLicense: state.newLicense!));
         }
       },
       child: Scaffold(
@@ -206,8 +206,12 @@ class _AllLicensePageState extends State<AllLicensePage> {
                                     ),
                                     IconButton(
                                       onPressed: () {
-                                        context.router
-                                            .push(const EditLicenseRoute());
+                                        context.router.push(
+                                          EditLicenseRoute(
+                                            templateLicense:
+                                                state.licenses![index],
+                                          ),
+                                        );
                                       },
                                       icon: const Icon(
                                         Icons.settings,

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart' as d;
 import 'package:vibeat_web/core/api_client.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
 
 abstract class EditBeatRemoteDataSource {
   Future<bool> addMp3File(
@@ -24,7 +25,10 @@ abstract class EditBeatRemoteDataSource {
     String v4, {
     void Function(double progress)? onProgress,
   });
-  Future<bool> publishBeat(PublishBeatEvent event);
+  Future<bool> publishBeat(
+    PublishBeatEvent event,
+    List<LicenseTemplateEntity> templateLicense,
+  );
 }
 
 class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
@@ -279,16 +283,38 @@ class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
   }
 
   @override
-  Future<bool> publishBeat(PublishBeatEvent event) async {
+  Future<bool> publishBeat(
+    PublishBeatEvent event,
+    List<LicenseTemplateEntity> templateLicense,
+  ) async {
     try {
-      final response = await _apiClient.get(
-        "unpbeats/publishBeat/${event.beatId}",
-        options: d.Options(),
-      );
+      final data = {
+        "licenses": templateLicense
+            .where((e) => e.isActive)
+            .map((e) => {
+                  "beatId": event.beatId,
+                  "licenseTemplateId": e.id,
+                  "price": e.price,
+                })
+            .toList(),
+      };
 
-      if (response.statusCode == 200) {
+      final results = await Future.wait([
+        _apiClient.get(
+          "unpbeats/publishBeat/${event.beatId}",
+          options: d.Options(),
+        ),
+        _apiClient.post(
+          "license/licenseList",
+          options: d.Options(),
+          data: data,
+        ),
+      ]);
+
+      if (results[0].statusCode == 200 && results[1].statusCode == 200) {
         return true;
       }
+
       return false;
     } on d.DioException catch (e) {
       log('DioException in getAnketa: $e');

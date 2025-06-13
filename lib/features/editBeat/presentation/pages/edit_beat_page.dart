@@ -1,23 +1,21 @@
 import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibeat_web/app/app_router.dart';
 import 'package:vibeat_web/app/injection_container.dart';
 import 'package:vibeat_web/custom_functions.dart';
 import 'package:vibeat_web/features/allBeats/domain/entities/beat_entity.dart';
-import 'package:vibeat_web/features/allLicenses/domain/entities/license_entity.dart';
 import 'package:vibeat_web/features/editBeat/presentation/bloc/edit_beat_bloc.dart';
-import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/basic_data.dart';
+import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/basic_data_beat.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/drag_drop_mp3.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/drag_drop_wav.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/drag_drop_zip.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_files/edit_cover.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_tags/edit_tags.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/edit_data/info_beat_widget.dart';
-import 'package:uuid/uuid.dart';
 import 'package:vibeat_web/features/editBeat/presentation/pages/widgets/license_cart_widget.dart';
 
 @RoutePage()
@@ -75,111 +73,19 @@ class _EditBeatPageState extends State<EditBeatPage> {
     }
   }
 
-  Future<void> uploadFileToS3(Uint8List fileBytes, String fileName) async {
-    setState(() => isUploading = true);
-
-    try {
-      var uuid = const Uuid();
-      String v4 = uuid.v1();
-
-      // Получаем presigned URL
-      final response = await dio.post(
-        "http://192.168.0.135:7774/api/presigned/PresignedPostRequest/mp3beats",
-        data: {
-          "uuidFileName": v4,
-          "file": fileName,
-        },
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-        }),
-      );
-
-      final url = response.data['data']['URL'];
-
-      // Загружаем файл на S3
-      final uploadResponse = await dio.put(
-        url,
-        // 'https://cors-anywhere.herokuapp.com/' + url,
-        data: fileBytes,
-        options: Options(
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            'Content-Type': 'audio/mpeg',
-            'Access-Control-Allow-Origin': '*',
-          },
-        ),
-        onSendProgress: (int sent, int total) {
-          setState(() {
-            progress = sent / total;
-            print('Upload progress: ${progress * 100}%');
-          });
-        },
-      );
-
-      if (uploadResponse.statusCode == 200) {
-        print('File uploaded successfully to Yandex Cloud S3');
-
-        final response = await dio.post(
-          "http://192.168.0.135:7774/api/updateURL/beat/mp3",
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-          }),
-          data: {
-            "id": "01966d6f-10d4-79cf-876b-50242cc9b8a5",
-            "objectKey": v4,
-          },
-        );
-
-        if (response.statusCode == 200) {
-          log("file is added");
-
-          setState(() {
-            nameFile1 = fileName;
-            fileAdded = true;
-            progress = 0;
-          });
-        }
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$fileName uploaded successfully')),
-          );
-        }
-      } else {
-        throw Exception('Failed to upload file: ${uploadResponse.statusCode}');
-      }
-    } on DioException catch (e) {
-      print('Dio error: ${e.message}');
-      if (e.response != null) {
-        print('Response data: ${e.response?.data}');
-        print('Response status: ${e.response?.statusCode}');
-      }
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to upload $fileName: ${e.message}')),
-        );
-      }
-    } catch (e) {
-      print('Error uploading file to Yandex Cloud S3: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to upload $fileName: $e')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => isUploading = false);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditBeatBloc>(
-      create: (context) => sl<EditBeatBloc>(
-        param1: widget.beat,
-        param2: widget.isEditMode,
-      ),
+      create: (context) {
+        final bloc = sl<EditBeatBloc>(
+          param1: widget.beat,
+          param2: widget.isEditMode,
+        );
+
+        bloc.add(const GetDataTemplateLicense());
+
+        return bloc;
+      },
       child: BlocListener<EditBeatBloc, BeatState>(
         listener: (context, state) {
           if (state is BeatEditState && state.isSavedSuccess == true) {
@@ -344,7 +250,7 @@ class _EditBeatPageState extends State<EditBeatPage> {
                       ),
                     ),
                   ),
-                  const BasicData(),
+                  const BasicDataBeat(),
                   const EditTags(),
                   const GenreSelector(),
                   CoverBeat(beatId: widget.beat.id),

@@ -1,5 +1,5 @@
 class LicenseModel {
-  final String id;
+  final int id;
   final String name;
   final bool mp3;
   final bool wav;
@@ -29,7 +29,7 @@ class LicenseModel {
 
   factory LicenseModel.fromJson(Map<String, dynamic> json) {
     return LicenseModel(
-      id: json['id'].toString(),
+      id: json['id'] as int,
       name: json['name'] as String,
       mp3: bool.parse(json['mp3'].toString()),
       wav: bool.parse(json['wav'].toString()),
