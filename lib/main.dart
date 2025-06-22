@@ -245,35 +245,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                MaterialButton(
-                  onPressed: () {
-                    // context.router.replaceNamed('');
-                  },
-                  elevation: 0,
-                  hoverColor: Colors.white12,
-                  // color: Colors.white12,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 18,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 10), // Отступ слева
-                      Text(
-                        'Аналитика',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.6),
-                          fontFamily: "Helvetica",
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // MaterialButton(
+                //   onPressed: () {
+                //     // context.router.replaceNamed('');
+                //   },
+                //   elevation: 0,
+                //   hoverColor: Colors.white12,
+                //   // color: Colors.white12,
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 40,
+                //     vertical: 18,
+                //   ),
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(6),
+                //   ),
+                //   child: Row(
+                //     children: [
+                //       const SizedBox(width: 10), // Отступ слева
+                //       Text(
+                //         'Аналитика',
+                //         style: TextStyle(
+                //           fontSize: 14,
+                //           color: Colors.white.withOpacity(0.6),
+                //           fontFamily: "Helvetica",
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

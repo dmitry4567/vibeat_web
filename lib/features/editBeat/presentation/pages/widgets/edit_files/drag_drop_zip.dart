@@ -61,7 +61,6 @@ class _DragAndDropZipState extends State<DragAndDropZip> {
                         if (result != null) {
                           final file = result.files.first;
 
-                          log(file.name.toString());
 
                           context.read<EditBeatBloc>().add(
                                 AddZipFileEvent(

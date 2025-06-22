@@ -237,7 +237,6 @@ Future<List<TagEntity>?> tagDialog(BuildContext context) async {
                                     ),
                                   ),
                                   onChanged: (value) {
-                                    log(value);
 
                                     setState(() {
                                       // Filter tags based on search

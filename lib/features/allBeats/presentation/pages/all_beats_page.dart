@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -522,7 +524,7 @@ class DynamicHeightContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final CategoryType category =
         items.firstWhere((element) => element.key == beat.status.name);
-
+    
     return LayoutBuilder(
       builder: (context, constraints) {
         double imageSize = constraints.maxWidth;
@@ -611,7 +613,7 @@ class DynamicHeightContainer extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      "icantluvv",
+                      beat.beatmakerName,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withOpacity(0.5),

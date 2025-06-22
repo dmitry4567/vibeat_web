@@ -288,8 +288,9 @@ class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
     List<LicenseTemplateEntity> templateLicense,
   ) async {
     try {
-      final data = {
-        "licenses": templateLicense
+      Map<String, dynamic> data = {
+        "beatId": event.beatId,
+        "licenseList": templateLicense
             .where((e) => e.isActive)
             .map((e) => {
                   "beatId": event.beatId,
@@ -299,19 +300,13 @@ class EditBeatRemoteDataSourceImpl implements EditBeatRemoteDataSource {
             .toList(),
       };
 
-      final results = await Future.wait([
-        _apiClient.get(
-          "unpbeats/publishBeat/${event.beatId}",
-          options: d.Options(),
-        ),
-        _apiClient.post(
-          "license/licenseList",
-          options: d.Options(),
-          data: data,
-        ),
-      ]);
+      final result = await _apiClient.post(
+        "unpbeats/publishBeat",
+        options: d.Options(),
+        data: data,
+      );
 
-      if (results[0].statusCode == 200 && results[1].statusCode == 200) {
+      if (result.statusCode == 200) {
         return true;
       }
 

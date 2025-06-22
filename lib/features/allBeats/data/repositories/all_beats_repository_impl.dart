@@ -54,6 +54,7 @@ class AllBeatRepositoryImpl implements AllBeatRepository {
                   wavUrl: e.availableFiles.wavUrl,
                   zipUrl: e.availableFiles.zipUrl,
                 ),
+                beatmakerName: e.beatmakerName,
                 bpm: e.bpm,
                 createdAt: e.createdAt,
               ),

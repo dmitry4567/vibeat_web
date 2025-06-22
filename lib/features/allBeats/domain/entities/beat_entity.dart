@@ -12,6 +12,7 @@ class BeatEntity extends Equatable {
   final KeyEntity key;
   final StatusBeat status;
   final AvailableFilesEntity availableFiles;
+  final String beatmakerName;
   final int bpm;
   final int createdAt;
 
@@ -26,6 +27,7 @@ class BeatEntity extends Equatable {
     required this.moods,
     required this.status,
     required this.availableFiles,
+    required this.beatmakerName,
     required this.bpm,
     required this.createdAt,
   });
@@ -59,6 +61,7 @@ class BeatEntity extends Equatable {
       availableFiles: AvailableFilesEntity.fromJson(
         json['availableFiles'] as Map<String, dynamic>,
       ),
+      beatmakerName: json['beatmakerName'],
       bpm: json['bpm'] as int,
       createdAt: json['created_at'] as int,
     );
@@ -74,6 +77,7 @@ class BeatEntity extends Equatable {
     KeyEntity? key,
     StatusBeat? status,
     AvailableFilesEntity? availableFiles,
+    String? beatmakerName,
     int? bpm,
     int? createdAt,
   }) {
@@ -88,6 +92,7 @@ class BeatEntity extends Equatable {
       key: key ?? this.key,
       status: status ?? this.status,
       availableFiles: availableFiles ?? this.availableFiles,
+      beatmakerName: beatmakerName ?? this.beatmakerName,
       bpm: bpm ?? this.bpm,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -105,6 +110,7 @@ class BeatEntity extends Equatable {
         key,
         status,
         availableFiles,
+        beatmakerName,
         bpm,
         createdAt,
       ];

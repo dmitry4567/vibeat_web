@@ -20,7 +20,7 @@ class SignInPage2 extends StatefulWidget {
 
 class _SignInPage2State extends State<SignInPage2> {
   // final GoogleSignInPlatform _platform = GetIt.I<GoogleSignInPlatform>();
-  final TextEditingController textController1 = TextEditingController(text: "d@gmail.com");
+  final TextEditingController textController1 = TextEditingController(text: "garry@example.com");
   final TextEditingController textController2 = TextEditingController(text: "1234");
   bool _isPasswordVisible = false;
 

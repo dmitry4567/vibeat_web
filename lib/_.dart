@@ -60,7 +60,6 @@ class _SignInPageState extends State<SignInPage> {
       if (response.statusCode == 200) {
         final responseData = response.data;
 
-        log(responseData.toString());
       } else {
         await _googleSignIn.signOut();
       }

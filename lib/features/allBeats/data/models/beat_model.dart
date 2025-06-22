@@ -5,6 +5,7 @@ class BeatModel {
   final String urlPicture;
   // final String beatmakerId;
   final AvailableFiles availableFiles;
+  final String beatmakerName;
   // final String urlBeat;
   // final int price;
   final List<Tag> tags;
@@ -19,27 +20,27 @@ class BeatModel {
   final StatusBeat status;
   final int createdAt;
 
-  const BeatModel({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.urlPicture,
-    // required this.beatmakerId,
-    required this.availableFiles,
-    // required this.urlBeat,
-    // required this.price,
-    required this.tags,
-    required this.bpm,
-    // required this.description,
-    required this.genres,
-    required this.moods,
-    required this.key,
-    // required this.keynoteId,
-    // required this.timestamps,
-    // required this.instruments,
-    required this.status,
-    required this.createdAt
-  });
+  const BeatModel(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.urlPicture,
+      // required this.beatmakerId,
+      required this.availableFiles,
+      required this.beatmakerName,
+      // required this.urlBeat,
+      // required this.price,
+      required this.tags,
+      required this.bpm,
+      // required this.description,
+      required this.genres,
+      required this.moods,
+      required this.key,
+      // required this.keynoteId,
+      // required this.timestamps,
+      // required this.instruments,
+      required this.status,
+      required this.createdAt});
 
   factory BeatModel.fromJson(Map<String, dynamic> json) {
     return BeatModel(
@@ -52,6 +53,7 @@ class BeatModel {
       // beatmakerId: json['beatmakerId'] as String,
       availableFiles: AvailableFiles.fromJson(
           json['AvailableFiles'] as Map<String, dynamic>),
+      beatmakerName: json['beatmakerName'],
       // urlBeat: json['url'] as String,
       // price: json['price'] as int,
       tags: (json['tags'] as List<dynamic>)
@@ -65,8 +67,7 @@ class BeatModel {
       moods: (json['moods'] as List<dynamic>)
           .map((mood) => Mood.fromJson(mood as Map<String, dynamic>))
           .toList(),
-      key: KeyModel.fromJson(
-          json['key'] as Map<String, dynamic>),
+      key: KeyModel.fromJson(json['key'] as Map<String, dynamic>),
       // keynoteId: json['keynoteId'] as int,
       // timestamps: (json['timestamps'] as List<dynamic>)
       //     .map((ts) => TimeStamp.fromJson(ts as Map<String, dynamic>))
@@ -189,4 +190,4 @@ class Instrument {
   }
 }
 
-enum StatusBeat { draft, published }
+enum StatusBeat { draft, processing, published }

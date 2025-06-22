@@ -318,7 +318,6 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       requestData["bpm"] = beat.bpm;
     }
 
-    log(requestData.toString());
 
     try {
       final response = await dio.patch(
@@ -332,14 +331,12 @@ class EditBeatBloc extends Bloc<EditBeatEvent, BeatState> {
       if (response.statusCode == 200) {
         final currentState = state as BeatEditState;
 
-        log("update beat");
 
         emit(currentState.copyWith(
           isSavedSuccess: true,
         ));
       }
     } catch (e) {
-      log(e.toString());
     }
   }
 

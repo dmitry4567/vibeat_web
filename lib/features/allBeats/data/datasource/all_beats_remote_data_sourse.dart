@@ -47,7 +47,7 @@ class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
       ];
 
       if (data.isNotEmpty) {
-        final List<BeatModel> beats = data
+        List<BeatModel> beats = data
             .map(
               (e) => BeatModel(
                 id: e['id'],
@@ -79,12 +79,14 @@ class AllBeatRemoteDataSourceImpl implements AllBeatRemoteDataSource {
                   wavUrl: e['availableFiles']['wavurl'],
                   zipUrl: e['availableFiles']['zipurl'],
                 ),
+                beatmakerName: e['beatmakerName'],
                 bpm: e['bpm'],
                 // beatmakerId: e['beatmakerId'],
                 createdAt: e['created_at'],
               ),
             )
             .toList();
+        // beats = beats.take(20).toList();
 
         beats.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
